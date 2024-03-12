@@ -12,7 +12,7 @@ from personal_assistant.utils.handler import (
     greeting,
 )
 from personal_assistant.utils.utils import parser
-from personal_assistant.classes.classes import AddressBook
+from personal_assistant.classes.address_book_classes import AddressBook
 
 import pathlib
 import os
