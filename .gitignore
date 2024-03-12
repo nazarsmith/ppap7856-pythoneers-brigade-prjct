@@ -2,10 +2,10 @@ __pycache__
 .env
 .venv
 .pytest_cache
-# book
-# setup.py
-# __init__.py
-# LICENSE
+book
+setup.py
+__init__.py
+LICENSE
 *.egg-info
 dist
 build

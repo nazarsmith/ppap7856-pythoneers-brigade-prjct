@@ -2,16 +2,9 @@ from collections import UserDict
 import re
 import pickle
 from datetime import datetime
+from personal_assistant.classes.base_classes import Field
 from personal_assistant.utils.utils import get_birthdays_per_week
 from personal_assistant.classes.exceptions import WrongDate, NoValue
-
-
-class Field:
-    def __init__(self, item):
-        self.item = item
-
-    def __str__(self):
-        return str(self.item)
 
 
 class Name(Field):

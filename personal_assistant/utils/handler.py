@@ -1,5 +1,5 @@
 import random
-from personal_assistant.classes.classes import (
+from personal_assistant.classes.address_book_classes import (
     AddressBook,
     Record,
 )
