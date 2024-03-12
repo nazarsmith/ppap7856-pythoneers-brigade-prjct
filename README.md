@@ -6,7 +6,7 @@ A CLI organizer that can help store contacts' phone numbers and birthday dates.
 
 ## Get Started
 
-Run `pip install nsta_assistant` to install the package and then `get-started` to get started. The list of available commands is as follows:
+Run `pip install personal_assistant` to install the package and then `get-started` to get started. The list of available commands is as follows:
 
 - `hi` or `hello` or `greeting` - to say hi to your favorite PA!
 - `add name phone` - to add a acontact and its phone number;
