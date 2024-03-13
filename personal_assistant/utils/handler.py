@@ -110,8 +110,8 @@ def show_birthday(personal_assistant, args):
 
 
 @wrong_input_handling
-def birthdays_next_week(personal_assistant):
-    return personal_assistant.birthdays_per_week()
+def birthdays_next_days(personal_assistant, args):
+    return personal_assistant.get_birthdays_next_days(args)
 
 
 @wrong_input_handling

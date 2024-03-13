@@ -3,7 +3,7 @@ import re
 import pickle
 from datetime import datetime
 from personal_assistant.classes.base_classes import Field
-from personal_assistant.utils.utils import get_birthdays_per_week
+from personal_assistant.utils.utils import get_birthdays_per_n_days
 from personal_assistant.classes.exceptions import WrongDate, NoValue
 
 
@@ -184,7 +184,8 @@ class AddressBook(UserDict):
         self.records -= 1
 
     @error_handler
-    def birthdays_per_week(self):
+    def get_birthdays_next_days(self, args):
         users = [user for user in self.data.values()]
-        birthdays = get_birthdays_per_week(users)
+        days = int(args.strip())
+        birthdays = get_birthdays_per_n_days(users, days)
         return birthdays

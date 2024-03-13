@@ -6,7 +6,7 @@ from personal_assistant.utils.handler import (
     show_phone,
     add_bd,
     show_birthday,
-    birthdays_next_week,
+    birthdays_next_days,
     remove_number,
     del_contact,
     num_records,
@@ -56,7 +56,7 @@ def main():
             print(show_birthday(personal_assistant, args))
 
         elif command == "birthdays":
-            [print(bd) for bd in birthdays_next_week(personal_assistant)]
+            [print(bd) for bd in birthdays_next_days(personal_assistant, args)]
 
         elif command in ["delete", "remove"]:
             print(del_contact(personal_assistant, args))

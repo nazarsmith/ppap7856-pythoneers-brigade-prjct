@@ -1,5 +1,7 @@
-from datetime import datetime
 import collections
+from datetime import datetime, timedelta
+from typing import List, Dict, Union
+
 from personal_assistant.classes.exceptions import (
     WrongInfoException,
     WrongDate,
@@ -87,43 +89,28 @@ def parser(user_input):
     return command, *args, None
 
 
-def get_birthdays_per_week(users: list[any]):
-    bds_seven_days = collections.defaultdict(list)
-    current_date = datetime.today().date()
-    birthdays = []
+def get_birthdays_per_n_days(users: List[Dict[str, Union[str, datetime]]], days: int):
+    results = collections.defaultdict(list)
+    today = datetime.today().date() + timedelta(days=1)
 
     for user in users:
-        if user.birthday:
-            user_bd = user.birthday.birthday.date()
-            bd_this_year = user_bd.replace(year=current_date.year)
-        else:
-            continue
+        name = user["name"]
+        birthday = user["birthday"].date()
+        birthday_this_year = birthday.replace(year=today.year)
 
-        if bd_this_year < current_date:
-            bd_this_year = bd_this_year.replace(year=current_date.year + 1)
+        if birthday_this_year < today:
+            birthday_this_year = birthday_this_year.replace(year=today.year + 1)
 
-        days_delta = (bd_this_year - current_date).days
+        delta_days = (birthday_this_year - today).days
 
-        if days_delta < 7:
-            day_to_congrats = bd_this_year.strftime("%A")
+        if delta_days < days:
+            if (dow := birthday_this_year.weekday()) >= 5:
+                birthday_this_year = birthday_this_year + timedelta(days=(0 - dow + 7) % 7)
 
-            ## if the function is run on Sunday and the BD is in 6 days
-            if days_delta == 6 and day_to_congrats in ["Saturday", "Sunday"]:
-                day_to_congrats = "Next Monday"
-            elif day_to_congrats in ["Saturday", "Sunday"]:
-                day_to_congrats = "Monday"
+            results[birthday_this_year.strftime('%A')].append(name)
 
-            bds_seven_days[day_to_congrats].append(user.name.name)
-
-    if len(bds_seven_days) > 0:
-        ## print out the list of names per day for the next seven days
-        for day, names in bds_seven_days.items():
-            birthdays.append("{:<15}{:<5}{}".format(day, ":", ", ".join(names)))
-    else:
-        birthdays.append("No birthdays next week.")
-
-    ## in case the list is needed elsewhere
-    return birthdays
+    return [f'{dow}: ' + ', '.join(names) for dow, names in results.items()] if results else [
+        f'No birthdays within next {days} days']
 
 
 ## test the function
@@ -162,4 +149,6 @@ if __name__ == "__main__":
         },
     ]
     print(users[0])
-    get_birthdays_per_week(users)
+    r = get_birthdays_per_n_days(users, 3)
+
+    print(r)
