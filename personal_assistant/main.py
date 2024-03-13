@@ -12,25 +12,25 @@ from personal_assistant.utils.handler import (
     greeting,
 )
 from personal_assistant.utils.utils import parser
-from personal_assistant.classes.address_book_classes import AddressBook
+from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
 
 import pathlib
 import os
 
 filepath = pathlib.Path(__file__).parents[-1]
-add_book_loc = filepath.joinpath("AddressBook")
+pa_loc = filepath.joinpath("PersonalAssistant")
 try:
-    os.makedirs(add_book_loc)
-except Exception:
+    os.makedirs(pa_loc)
+except Exception as err:
     pass
 
 
 def main():
 
     try:
-        book = AddressBook().read_from_file(add_book_loc)
+        personal_assistant = PersonalAssistant().read_from_file(pa_loc)
     except:
-        book = AddressBook()
+        personal_assistant = PersonalAssistant()
 
     print("Welcome to the assistant bot!")
     while True:
@@ -42,41 +42,42 @@ def main():
 
         if command in ["exit", "close"]:
             print("Good bye!")
-            book.write_to_file(add_book_loc)
+            personal_assistant.write_to_file(pa_loc)
             break
 
         elif command in ["hello", "hi", "greetings"]:
             print(greeting(), end=" ")
 
         elif command == "add":
-            print(add_contact(book, args))
+            print(add_contact(personal_assistant, args))
 
         elif command == "all":
-            [print(c) for c in show_all(book)]
+            [print(c) for c in show_all(personal_assistant)]
 
         elif command == "phone":
-            print(show_phone(book, args))
+            print(show_phone(personal_assistant, args))
 
         elif command == "change":
-            print(change_contact(book, args))
+            print(change_contact(personal_assistant, args))
 
         elif command == "remove-phone":
-            print(remove_number(book, args))
+            print(remove_number(personal_assistant, args))
 
         elif command == "add-birthday":
-            print(add_bd(book, args))
+            print(add_bd(personal_assistant, args))
 
         elif command == "show-birthday":
-            print(show_birthday(book, args))
+            print(show_birthday(personal_assistant, args))
 
         elif command == "birthdays":
-            [print(bd) for bd in birthdays_next_week(book)]
+            [print(bd) for bd in birthdays_next_week(personal_assistant)]
 
         elif command in ["delete", "remove"]:
-            print(del_contact(book, args))
+            print(del_contact(personal_assistant, args))
 
         elif command == "entries":
-            print(num_records(book))
+            print(num_records(personal_assistant))
+
         elif not command:
             pass
 

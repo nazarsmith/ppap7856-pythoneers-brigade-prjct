@@ -3,6 +3,7 @@ from personal_assistant.classes.address_book_classes import (
     AddressBook,
     Record,
 )
+from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
 from personal_assistant.classes.exceptions import WrongInfoException, WrongDate, NoValue
 from personal_assistant.utils.utils import check_args, wrong_input_handling, get_contact
 
@@ -14,16 +15,16 @@ def greeting():
 
 
 @wrong_input_handling
-def add_contact(book: AddressBook, args):
+def add_contact(personal_assistant: PersonalAssistant, args):
     check_args(args, WrongInfoException())
 
     name = args[0]
     phone = args[-1]
     confirm = None
 
-    if name in list(book.data.keys()):
+    if name in list(personal_assistant.data.keys()):
 
-        book_entry = book.data[name]
+        book_entry = personal_assistant.data[name]
         try:
             if book_entry.find_phone(phone):
                 return "This phone number is already associated with this contact."
@@ -40,38 +41,38 @@ def add_contact(book: AddressBook, args):
     else:
         contact = Record(name)
         contact.add_phone(args[-1])
-        book.add_record(contact)
+        personal_assistant.add_record(contact)
 
     return "Contact added."
 
 
 @wrong_input_handling
-def change_contact(book: AddressBook, args):
+def change_contact(personal_assistant: PersonalAssistant, args):
     check_args(args, ValueError())
 
-    contact = get_contact(book, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.edit_phone(args[1], args[-1])
     return "Contact updated."
 
 
 @wrong_input_handling
-def show_phone(book, args):
+def show_phone(personal_assistant, args):
     check_args(args, NoValue())
-    contact = get_contact(book, args[0])
+    contact = get_contact(personal_assistant, args[0])
     found_phones = contact.list_str_rep(contact.phones)
     found_phones = "; ".join(found_phones)
     return f"{args[0]}'s phone numbers: {found_phones}"
 
 
 @wrong_input_handling
-def show_all(book):
-    names = list(book.keys())
+def show_all(personal_assistant):
+    names = list(personal_assistant.keys())
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
     if not names:
         yield "No contacts found. " + add_phone_message
 
-    for i in range(len(book.keys())):
-        contact = get_contact(book, names[i])
+    for i in range(len(personal_assistant.keys())):
+        contact = get_contact(personal_assistant, names[i])
         found_phones = contact.list_str_rep(contact.phones)
 
         if not found_phones:
@@ -90,17 +91,17 @@ def show_all(book):
 
 
 @wrong_input_handling
-def add_bd(book, args):
+def add_bd(personal_assistant, args):
     check_args(args, WrongDate())
-    contact = get_contact(book, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.add_birthday(args[1])
     return "Birthday date added."
 
 
 @wrong_input_handling
-def show_birthday(book, args):
+def show_birthday(personal_assistant, args):
     check_args(args, NoValue())
-    contact = get_contact(book, args[0])
+    contact = get_contact(personal_assistant, args[0])
     bd = contact.birthday
     if bd:
         bd = str(bd)
@@ -109,29 +110,29 @@ def show_birthday(book, args):
 
 
 @wrong_input_handling
-def birthdays_next_week(book):
-    return book.birthdays_per_week()
+def birthdays_next_week(personal_assistant):
+    return personal_assistant.birthdays_per_week()
 
 
 @wrong_input_handling
-def remove_number(book, args):
+def remove_number(personal_assistant, args):
     check_args(args, WrongInfoException())
-    contact = get_contact(book, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.remove_phone(args[-1])
     return f"The number was deleted from {args[0]}'s list of phone numbers."
 
 
 @wrong_input_handling
-def del_contact(book, args):
+def del_contact(personal_assistant, args):
     check_args(args, NoValue())
-    book.delete(args[0])
+    personal_assistant.delete(args[0])
     return "The contact was deleted."
 
 
 @wrong_input_handling
-def num_records(book):
-    message = f"The address book has {book.records} entries. "
-    if not book.records:
+def num_records(personal_assistant):
+    message = f"The address book has {personal_assistant.records} entries. "
+    if not personal_assistant.records:
         return message + 'Enter "add <name> <number>" to add a contact.'
     else:
         return message + 'Type "all" to list all of them.'
