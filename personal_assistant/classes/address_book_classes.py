@@ -36,6 +36,8 @@ class Record:
         self.name = Name(name)
         self.phones = []
         self.birthday = None
+        self.emails = []
+        self.address = None
 
     def __str__(self):
         return f"Contact name: {self.name.item}, phones: {'; '.join(p.item for p in self.phones)}"
@@ -108,6 +110,36 @@ class Record:
         if not birthday:
             raise NoValue("No birthday date was provided.")
         self.birthday = Birthday(birthday)
+
+    @error_handler
+    def add_email(self, email: str = None):
+        if not email:
+            raise NoValue("No email address was provided.")
+        self.emails.append(Email(email))
+
+    @error_handler
+    def change_email(self, old_email, new_email):
+        old_email_index = self.list_str_rep(self.emails).index(old_email)
+        self.emails[old_email_index] = Email(new_email)
+
+    def delete_email(self, email: str = None):
+        if not email:
+            raise NoValue("No email address was provided.")
+        email_index = self.list_str_rep(self.emails).index(email)
+        self.emails.pop(email_index)
+
+    def add_address(self, address: str = None):
+        if not address:
+            raise NoValue("No address was provided.")
+        self.address = Address(address)
+
+    def change_address(self, new_address: str = ...):
+        if not new_address:
+            raise NoValue("No address was provided.")
+        self.address = Address(new_address)
+
+    def delete_address(self):
+        self.address = None
 
 
 class AddressBook(UserDict):
