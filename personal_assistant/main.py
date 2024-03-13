@@ -1,3 +1,7 @@
+import os
+import pathlib
+
+from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
 from personal_assistant.utils.handler import (
     add_contact,
     show_all,
@@ -12,12 +16,8 @@ from personal_assistant.utils.handler import (
     greeting,
 )
 from personal_assistant.utils.utils import parser
-from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
 
-import pathlib
-import os
-
-filepath = pathlib.Path(__file__).parents[-1]
+filepath = pathlib.Path(__file__).parent
 pa_loc = filepath.joinpath("PersonalAssistant")
 try:
     os.makedirs(pa_loc)
@@ -26,7 +26,6 @@ except Exception as err:
 
 
 def main():
-
     try:
         personal_assistant = PersonalAssistant().read_from_file(pa_loc)
     except:
