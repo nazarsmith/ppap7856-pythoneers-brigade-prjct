@@ -136,3 +136,27 @@ def num_records(personal_assistant):
         return message + 'Enter "add <name> <number>" to add a contact.'
     else:
         return message + 'Type "all" to list all of them.'
+
+
+def add_email(personal_assistant, args):
+    pass
+
+
+def change_email(personal_assistant, args):
+    pass
+
+
+def delete_email(personal_assistant, args):
+    pass
+
+
+def add_address(personal_assistant, args):
+    pass
+
+
+def change_address(personal_assistant, args):
+    pass
+
+
+def delete_address(personal_assistant):
+    pass

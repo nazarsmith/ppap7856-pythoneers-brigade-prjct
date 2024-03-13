@@ -12,3 +12,11 @@ class WrongInfoException(ValueError):
 
 class WrongDate(ValueError):
     pass
+
+
+class WrongEmail(ValueError):
+    pass
+
+
+class WrongAddress(ValueError):
+    pass
