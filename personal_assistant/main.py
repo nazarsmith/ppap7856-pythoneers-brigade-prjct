@@ -1,6 +1,3 @@
-import os
-import pathlib
-
 from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
 from personal_assistant.utils.handler import (
     add_contact,
@@ -17,19 +14,9 @@ from personal_assistant.utils.handler import (
 )
 from personal_assistant.utils.utils import parser
 
-filepath = pathlib.Path(__file__).parent
-pa_loc = filepath.joinpath("PersonalAssistant")
-try:
-    os.makedirs(pa_loc)
-except Exception as err:
-    pass
-
 
 def main():
-    try:
-        personal_assistant = PersonalAssistant().read_from_file(pa_loc)
-    except:
-        personal_assistant = PersonalAssistant()
+    personal_assistant = PersonalAssistant()
 
     print("Welcome to the assistant bot!")
     while True:
@@ -41,7 +28,7 @@ def main():
 
         if command in ["exit", "close"]:
             print("Good bye!")
-            personal_assistant.write_to_file(pa_loc)
+            personal_assistant.cache_data()
             break
 
         elif command in ["hello", "hi", "greetings"]:

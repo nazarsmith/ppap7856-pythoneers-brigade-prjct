@@ -1,4 +1,6 @@
-from personal_assistant.main import main
+import os
+import pathlib
 
-if __name__ == "__main__":
-    main()
+_CACHE_DIR = pathlib.Path(__file__).parent.joinpath('.cache')
+
+os.makedirs(_CACHE_DIR, exist_ok=True)
