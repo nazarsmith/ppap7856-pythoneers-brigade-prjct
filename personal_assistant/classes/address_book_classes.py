@@ -156,12 +156,3 @@ class AddressBook(UserDict):
         users = [user for user in self.data.values()]
         birthdays = get_birthdays_per_week(users)
         return birthdays
-
-    def write_to_file(self, book_path):
-        with open(book_path.joinpath("book.bin"), "wb") as file:
-            pickle.dump(self, file)
-
-    def read_from_file(self, book_path):
-        with open(book_path.joinpath("book.bin"), "rb") as file:
-            book = pickle.load(file)
-            return book
