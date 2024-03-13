@@ -5,6 +5,8 @@ from personal_assistant.classes.exceptions import (
     WrongDate,
     NoValue,
     NoPhones,
+    WrongEmail,
+    WrongAddress,
 )
 
 
@@ -15,6 +17,10 @@ def wrong_input_handling(function):
         except WrongInfoException as err:
             return err
         except WrongDate as err:
+            return err.args[0]
+        except WrongEmail as err:
+            return err.args[0]
+        except WrongAddress as err:
             return err.args[0]
         except NoValue as err:
             return err.args[0]
@@ -50,6 +56,21 @@ def check_args(args, exc: Exception):
         elif len(args) < 1:
             raise WrongInfoException(
                 "Neither name nor phone number provided. Please try again."
+            )
+    elif isinstance(exc, WrongEmail):
+        if len(args) == 1:
+            raise WrongEmail("Please provide both a name and email.")
+
+        elif len(args) < 1:
+            raise WrongEmail("Neither name nor email was provided. Please try again.")
+
+    elif isinstance(exc, WrongAddress):
+        if len(args) == 1:
+            raise WrongAddress("Please provide both a name and adress.")
+
+        elif len(args) < 1:
+            raise WrongAddress(
+                "Neither name nor address were provided. Please try again."
             )
 
     elif isinstance(exc, WrongDate):

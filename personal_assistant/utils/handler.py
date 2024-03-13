@@ -4,7 +4,13 @@ from personal_assistant.classes.address_book_classes import (
     Record,
 )
 from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
-from personal_assistant.classes.exceptions import WrongInfoException, WrongDate, NoValue
+from personal_assistant.classes.exceptions import (
+    WrongInfoException,
+    WrongDate,
+    WrongAddress,
+    WrongEmail,
+    NoValue,
+)
 from personal_assistant.utils.utils import check_args, wrong_input_handling, get_contact
 
 
@@ -138,25 +144,49 @@ def num_records(personal_assistant):
         return message + 'Type "all" to list all of them.'
 
 
+@wrong_input_handling
 def add_email(personal_assistant, args):
-    pass
+    check_args(args, WrongEmail())
+    contact = get_contact(personal_assistant, args[0])
+    contact.add_email(args[1])
+    return f"Email address {args[1]} added successfully to contact {args[0]}."
 
 
+@wrong_input_handling
 def change_email(personal_assistant, args):
-    pass
+    check_args(args, ValueError())
+    contact = get_contact(personal_assistant, args[0])
+    contact.change_email(args[1], args[2])
+    return f"Email address updated successfully for contact {args[0]}."
 
 
+@wrong_input_handling
 def delete_email(personal_assistant, args):
-    pass
+    check_args(args, WrongEmail())
+    contact = get_contact(personal_assistant, args[0])
+    contact.delete_email(args[1])
+    return "The email address was deleted."
 
 
+@wrong_input_handling
 def add_address(personal_assistant, args):
-    pass
+    check_args(args, WrongAddress())
+    contact = personal_assistant.find(args[0])
+    contact.add_address(args[1])
+    return f"Address {args[1]} added successfully to contact {args[0]}."
 
 
+@wrong_input_handling
 def change_address(personal_assistant, args):
-    pass
+    check_args(args, ValueError())
+    contact = get_contact(personal_assistant, args[0])
+    contact.change_address(args[1], args[2])
+    return f"Address updated successfully for contact {args[0]}."
 
 
-def delete_address(personal_assistant):
-    pass
+@wrong_input_handling
+def delete_address(personal_assistant, args):
+    check_args(args, WrongAddress())
+    contact = get_contact(personal_assistant, args[0])
+    contact.delete_address(args[1])
+    return "The address was deleted."

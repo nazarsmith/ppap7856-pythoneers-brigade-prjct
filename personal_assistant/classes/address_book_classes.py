@@ -4,7 +4,12 @@ import pickle
 from datetime import datetime
 from personal_assistant.classes.base_classes import Field
 from personal_assistant.utils.utils import get_birthdays_per_week
-from personal_assistant.classes.exceptions import WrongDate, NoValue
+from personal_assistant.classes.exceptions import (
+    WrongDate,
+    WrongEmail,
+    WrongAddress,
+    NoValue,
+)
 
 
 class Name(Field):
@@ -29,6 +34,35 @@ class Birthday(Field):
         except AttributeError:
             raise WrongDate("The date must be of the DD.MM.YYYY format. Try again.")
         self.birthday = datetime.strptime(checked_birthday, "%d.%m.%Y")
+
+
+class Email(Field):
+    def __init__(self, email: str):
+        super().__init__(email)
+        self.email = self.validate_email(email)
+
+    def validate_email(self, email):
+        pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        if not re.match(pattern, email):
+            raise WrongEmail(
+                "Invalid email address format. Please enter the email address in the format example@example.com"
+            )
+        return email
+
+
+class Address(Field):
+    def __init__(self, address: str):
+        super().__init__(address)
+        self.address = self.validate_address(address)
+
+    def validate_address(self, address):
+        # pattern = r"^\d+,\s*[\w\s]+\s*(?:street|St\.)?,\s*\w+,\s*\d{5}$"
+        pattern = r"^.{10,100}$"
+        if not re.match(pattern, address):
+            raise WrongAddress(
+                "Invalid address format. Please enter the address in the format: 'house number, street, city, postal code'."
+            )
+        return address
 
 
 class Record:
