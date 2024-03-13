@@ -22,7 +22,6 @@ pa_loc = filepath.joinpath("PersonalAssistant")
 try:
     os.makedirs(pa_loc)
 except Exception as err:
-    # print(err)
     pass
 
 
@@ -75,12 +74,6 @@ def main():
 
         elif command in ["delete", "remove"]:
             print(del_contact(personal_assistant, args))
-
-        elif command in ["add-note"]:
-            personal_assistant.add_note()
-
-        elif command in ["show-notes"]:
-            personal_assistant.show_notes()
 
         elif command == "entries":
             print(num_records(personal_assistant))
