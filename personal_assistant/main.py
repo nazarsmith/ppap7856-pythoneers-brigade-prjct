@@ -22,7 +22,6 @@ def main():
     print("Welcome to the assistant bot!")
 
     while True:
-
         user_input = input("How can I help you?\nEnter a command: ")
         command, *args, message = parser(user_input)
         if message:
@@ -65,40 +64,28 @@ def main():
 
         elif command == "entries":
             print(num_records(personal_assistant))
+
         elif command == "help":
             print(messages.contacts_menu + messages.notes_menu)
 
         elif command == "add-note":
-            personal_assistant.add_note()
+            print(personal_assistant.add_note())
 
         elif command == "remove-note":
             note_name = input("Enter the name of the note to delete: ")
-            personal_assistant.remove_note(note_name)
-            print("Note deleted successfully.")
+            print(personal_assistant.remove_note(note_name))
 
         elif command == "show-notes":
-            all_notes = personal_assistant.get_all_notes()
-            if all_notes:
-                print("All Notes:")
-                for note in all_notes:
-                    print(note)
-            else:
-                print("No notes found.")
+            print(personal_assistant.get_all_notes())
 
         elif command == "edit-note":
             note_name = input("Enter the name of the note you want to edit: ")
             new_text = input("Enter the new text for the note: ")
-            personal_assistant.edit_note(note_name, new_text)
+            print(personal_assistant.edit_note(note_name, new_text))
 
         elif command == "search-note":
             search_term = input("Enter search query: ")
-            found_notes = personal_assistant.search_note(search_term)
-            if found_notes:
-                print("Matching Notes:")
-                for note in found_notes:
-                    print(note)
-            else:
-                print("No matching notes found.")
+            print(personal_assistant.search_note(search_term))
 
         elif not command:
             pass

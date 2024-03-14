@@ -1,8 +1,8 @@
-from collections import UserDict
+from collections import UserList
 
 
 class Note:
-    def __init__(self, name="Untitled Note", tags=[], text=None):
+    def __init__(self, name, tags, text):
         self.name = name
         self.tags = tags
         self.text = text
@@ -11,7 +11,7 @@ class Note:
         return f"{self.name}, {self.tags}, {self.text}"
 
 
-class NoteBook(UserDict):
+class NoteBook(UserList):
     def __init__(self):
         super().__init__()
 
@@ -21,33 +21,34 @@ class NoteBook(UserDict):
         text = input("Enter note text: ")
 
         note = Note(name.strip(), [tag.strip() for tag in tags], text.strip())
-        self.data[name] = note
-        print("Note added successfully.")
+        self.data.append(note)
+        return "Note added successfully."
 
     def get_all_notes(self):
-        all_notes = []
-        for note in self.data.values():
-            all_notes.append(str(note))
-        return all_notes
+        return 'All Notes:\n' + '\n'.join(str(note) for note in self.data) if self.data else 'No notes found.'
 
     def remove_note(self, name):
-        deleted = self.data.pop(name, None)
-        if deleted:
-            print(f"Note '{name}' removed successfully.")
+        matching_notes = [note for note in self.data if note.name == name]
+        [self.data.remove(note) for note in matching_notes]
+
+        if matching_notes:
+            return f"{len(matching_notes)} notes with name '{name}' were removed successfully."
         else:
-            print(f"Note '{name}' not found in the notebook.")
+            return f"Note '{name}' not found in the notebook."
 
     def edit_note(self, name, new_text):
-        if name in self.data:
-            self.data[name].text = new_text
-            print(f"Note '{name}' edited successfully.")
+        matching_notes = [note for note in self.data if note.name == name]
+
+        if matching_notes:
+            matching_notes[0].text = new_text
+            return f"Note '{name}' edited successfully."
         else:
-            print(f"Note '{name}' not found in the notebook.")
+            return f"Note '{name}' not found in the notebook."
 
     def search_note(self, query: str):
-        name = query.split("name=")[-1].split(";")[0]
-        tag = query.split("tag=")[-1].split(";")[0]
-        text = query.split("text=")[-1].split(";")[0]
+        name = query.split("name=")[-1].split(';')[0] if 'name=' in query else None
+        tag = query.split("tag=")[-1].split(';')[0] if 'tag=' in query else None
+        text = query.split("text=")[-1].split(";")[0] if 'text=' in query else None
 
         def name_matches(note: Note):
             return note.name == name if name else True
@@ -59,8 +60,10 @@ class NoteBook(UserDict):
             return text in note.text if text else True
 
         def matches(note):
-            return name_matches(note) or tag_matches(note) or text_matches(note)
+            return name_matches(note) and tag_matches(note) and text_matches(note)
 
-        matching_notes = list(filter(matches, self.data.values()))
+        matching_notes = list(filter(matches, self.data))
 
-        return matching_notes
+        return 'Matching Notes:\n' + '\n'.join(
+            str(n) for n in matching_notes
+        ) if matching_notes else 'No matching notes found.'
