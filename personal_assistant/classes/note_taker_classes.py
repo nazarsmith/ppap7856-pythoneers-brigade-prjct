@@ -59,7 +59,7 @@ class NoteBook(UserDict):
             return text in note.text if text else True
 
         def matches(note):
-            return name_matches(note) and tag_matches(note) and text_matches(note)
+            return name_matches(note) or tag_matches(note) or text_matches(note)
 
         matching_notes = list(filter(matches, self.data.values()))
 
