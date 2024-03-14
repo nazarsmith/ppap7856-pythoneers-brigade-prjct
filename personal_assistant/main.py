@@ -18,6 +18,8 @@ from personal_assistant.utils.handler import (
     add_address,
     change_address,
     delete_address,
+    show_address,
+    show_email,
 )
 from personal_assistant.utils.utils import parser
 
@@ -79,6 +81,9 @@ def main():
         elif command == "change-email":
             print(change_email(personal_assistant, args))
 
+        elif command == "show-email":
+            print(show_email(personal_assistant, args))
+
         elif command == "delete-email":
             print(delete_email(personal_assistant, args))
 
@@ -87,6 +92,9 @@ def main():
 
         elif command == "change-address":
             print(change_address(personal_assistant, args))
+
+        elif command == "show-address":
+            print(show_address(personal_assistant, args))
 
         elif command == "delete-address":
             print(delete_address(personal_assistant, args))

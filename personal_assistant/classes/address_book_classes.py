@@ -47,6 +47,7 @@ class Email(Field):
             raise WrongEmail(
                 "Invalid email address format. Please enter the email address in the format example@example.com"
             )
+        print("email", email)
         return email
 
 
@@ -103,6 +104,9 @@ class Record:
             except WrongDate as err:
                 raise WrongDate from err
 
+            except WrongEmail as err:
+                raise WrongEmail(err)
+
             except ValueError:
                 raise ValueError(
                     f"{args[0]} is not on the list of {self.name}'s phone numbers."
@@ -149,7 +153,8 @@ class Record:
     def add_email(self, email: str = None):
         if not email:
             raise NoValue("No email address was provided.")
-        self.emails.append(Email(email))
+        e_mail = Email(email)
+        self.emails.append(e_mail)
 
     @error_handler
     def change_email(self, old_email, new_email):

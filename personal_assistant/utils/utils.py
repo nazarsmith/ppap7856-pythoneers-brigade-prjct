@@ -68,11 +68,6 @@ def check_args(args, exc: Exception):
         if len(args) == 1:
             raise WrongAddress("Please provide both a name and adress.")
 
-        elif len(args) < 1:
-            raise WrongAddress(
-                "Neither name nor address were provided. Please try again."
-            )
-
     elif isinstance(exc, WrongDate):
         if len(args) == 1:
             raise WrongDate("Please provide both a name and a date.")
@@ -97,6 +92,14 @@ def check_args(args, exc: Exception):
             raise ValueError(
                 "Please provide an account name, old and new phone numbers."
             )
+
+
+def pre_check_addr(args):
+    if args[1:]:
+        address = " ".join(args[1:])
+        return address
+    else:
+        raise IndexError
 
 
 def parser(user_input):
