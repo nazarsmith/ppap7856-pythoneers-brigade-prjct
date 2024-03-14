@@ -1,16 +1,17 @@
+import personal_assistant.utils.messages as messages
 from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
 from personal_assistant.utils.handler import (
-    add_contact,
-    show_all,
-    change_contact,
-    show_phone,
     add_bd,
-    show_birthday,
+    add_contact,
     birthdays_next_week,
-    remove_number,
+    change_contact,
     del_contact,
-    num_records,
     greeting,
+    num_records,
+    remove_number,
+    show_all,
+    show_birthday,
+    show_phone,
 )
 from personal_assistant.utils.utils import parser
 
@@ -63,6 +64,8 @@ def main():
 
         elif command == "entries":
             print(num_records(personal_assistant))
+        elif command == "help":
+            print(messages.contacts_menu + messages.notes_menu)
 
         elif not command:
             pass
