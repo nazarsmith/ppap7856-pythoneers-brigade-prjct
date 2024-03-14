@@ -12,6 +12,14 @@ from personal_assistant.utils.handler import (
     show_all,
     show_birthday,
     show_phone,
+    add_email,
+    change_email,
+    delete_email,
+    add_address,
+    change_address,
+    delete_address,
+    show_address,
+    show_email,
 )
 from personal_assistant.utils.utils import parser
 
@@ -66,6 +74,30 @@ def main():
             print(num_records(personal_assistant))
         elif command == "help":
             print(messages.contacts_menu + messages.notes_menu)
+
+        elif command == "add-email":
+            print(add_email(personal_assistant, args))
+
+        elif command == "change-email":
+            print(change_email(personal_assistant, args))
+
+        elif command == "show-email":
+            print(show_email(personal_assistant, args))
+
+        elif command == "delete-email":
+            print(delete_email(personal_assistant, args))
+
+        elif command == "add-address":
+            print(add_address(personal_assistant, args))
+
+        elif command == "change-address":
+            print(change_address(personal_assistant, args))
+
+        elif command == "show-address":
+            print(show_address(personal_assistant, args))
+
+        elif command == "delete-address":
+            print(delete_address(personal_assistant, args))
 
         elif not command:
             pass
