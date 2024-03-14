@@ -1,5 +1,5 @@
-from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
-from personal_assistant.utils.handler import (
+from personal_assistant.src.personal_assistant import PersonalAssistant
+from personal_assistant.commands import (
     add_contact,
     show_all,
     change_contact,
@@ -12,7 +12,7 @@ from personal_assistant.utils.handler import (
     num_records,
     greeting,
 )
-from personal_assistant.utils.utils import parser
+from personal_assistant.src.utils import parser
 
 
 def main():

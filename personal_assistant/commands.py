@@ -1,11 +1,9 @@
 import random
-from personal_assistant.classes.address_book_classes import (
-    AddressBook,
-    Record,
-)
-from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
-from personal_assistant.classes.exceptions import WrongInfoException, WrongDate, NoValue
-from personal_assistant.utils.utils import check_args, wrong_input_handling, get_contact
+
+from personal_assistant.src.address_book.record import Record
+from personal_assistant.src.exceptions.exceptions import WrongInfoException, NoValue, WrongDate
+from personal_assistant.src.personal_assistant import PersonalAssistant
+from personal_assistant.src.utils import check_args, wrong_input_handling, get_contact
 
 
 def greeting():
@@ -22,9 +20,9 @@ def add_contact(personal_assistant: PersonalAssistant, args):
     phone = args[-1]
     confirm = None
 
-    if name in list(personal_assistant.data.keys()):
+    if name in list(personal_assistant.address_book.data.keys()):
 
-        book_entry = personal_assistant.data[name]
+        book_entry = personal_assistant.address_book.data[name]
         try:
             if book_entry.find_phone(phone):
                 return "This phone number is already associated with this contact."
@@ -36,12 +34,12 @@ def add_contact(personal_assistant: PersonalAssistant, args):
         if confirm in ["yes", "1", "affirmative", "y"]:
             book_entry.add_phone(args[-1])
         else:
-            return "Canelling contact addition."
+            return "Cancelling contact addition."
 
     else:
         contact = Record(name)
         contact.add_phone(args[-1])
-        personal_assistant.add_record(contact)
+        personal_assistant.address_book.add_record(contact)
 
     return "Contact added."
 
@@ -50,7 +48,7 @@ def add_contact(personal_assistant: PersonalAssistant, args):
 def change_contact(personal_assistant: PersonalAssistant, args):
     check_args(args, ValueError())
 
-    contact = get_contact(personal_assistant, args[0])
+    contact = get_contact(personal_assistant.address_book, args[0])
     contact.edit_phone(args[1], args[-1])
     return "Contact updated."
 
@@ -58,7 +56,7 @@ def change_contact(personal_assistant: PersonalAssistant, args):
 @wrong_input_handling
 def show_phone(personal_assistant, args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant, args[0])
+    contact = get_contact(personal_assistant.address_book, args[0])
     found_phones = contact.list_str_rep(contact.phones)
     found_phones = "; ".join(found_phones)
     return f"{args[0]}'s phone numbers: {found_phones}"
@@ -66,13 +64,13 @@ def show_phone(personal_assistant, args):
 
 @wrong_input_handling
 def show_all(personal_assistant):
-    names = list(personal_assistant.keys())
+    names = list(personal_assistant.address_book.keys())
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
     if not names:
         yield "No contacts found. " + add_phone_message
 
-    for i in range(len(personal_assistant.keys())):
-        contact = get_contact(personal_assistant, names[i])
+    for i in range(len(personal_assistant.address_book.keys())):
+        contact = get_contact(personal_assistant.address_book, names[i])
         found_phones = contact.list_str_rep(contact.phones)
 
         if not found_phones:
@@ -93,7 +91,7 @@ def show_all(personal_assistant):
 @wrong_input_handling
 def add_bd(personal_assistant, args):
     check_args(args, WrongDate())
-    contact = get_contact(personal_assistant, args[0])
+    contact = get_contact(personal_assistant.address_book, args[0])
     contact.add_birthday(args[1])
     return "Birthday date added."
 
@@ -101,7 +99,7 @@ def add_bd(personal_assistant, args):
 @wrong_input_handling
 def show_birthday(personal_assistant, args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant, args[0])
+    contact = get_contact(personal_assistant.address_book, args[0])
     bd = contact.birthday
     if bd:
         bd = str(bd)

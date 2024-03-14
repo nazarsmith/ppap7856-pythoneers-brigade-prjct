@@ -1,6 +1,6 @@
 from datetime import datetime
 import collections
-from personal_assistant.classes.exceptions import (
+from personal_assistant.src.exceptions.exceptions import (
     WrongInfoException,
     WrongDate,
     NoValue,
