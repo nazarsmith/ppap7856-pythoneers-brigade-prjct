@@ -28,8 +28,8 @@ def main():
     personal_assistant = PersonalAssistant()
 
     print("Welcome to the assistant bot!")
-    while True:
 
+    while True:
         user_input = input("How can I help you?\nEnter a command: ")
         command, *args, message = parser(user_input)
         if message:
@@ -72,8 +72,28 @@ def main():
 
         elif command == "entries":
             print(num_records(personal_assistant))
+
         elif command == "help":
             print(messages.contacts_menu + messages.notes_menu)
+
+        elif command == "add-note":
+            print(personal_assistant.add_note())
+
+        elif command == "remove-note":
+            note_name = input("Enter the name of the note to delete: ")
+            print(personal_assistant.remove_note(note_name))
+
+        elif command == "show-notes":
+            print(personal_assistant.get_all_notes())
+
+        elif command == "edit-note":
+            note_name = input("Enter the name of the note you want to edit: ")
+            new_text = input("Enter the new text for the note: ")
+            print(personal_assistant.edit_note(note_name, new_text))
+
+        elif command == "search-note":
+            search_term = input("Enter search query: ")
+            print(personal_assistant.search_note(search_term))
 
         elif command == "add-email":
             print(add_email(personal_assistant, args))
