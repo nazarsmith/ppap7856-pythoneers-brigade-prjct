@@ -19,6 +19,11 @@ from personal_assistant.commands import (
     delete_address,
     show_address,
     show_email,
+    add_note,
+    edit_note,
+    show_notes,
+    remove_note,
+    search_note
 )
 from personal_assistant.src.personal_assistant import personal_assistant
 from personal_assistant.src.utils import parser
@@ -75,23 +80,19 @@ def main():
             print(messages.contacts_menu + messages.notes_menu)
 
         elif command == "add-note":
-            print(personal_assistant.notebook.add_note())
-
-        elif command == "remove-note":
-            note_name = input("Enter the name of the note to delete: ")
-            print(personal_assistant.notebook.remove_note(note_name))
-
-        elif command == "show-notes":
-            print(personal_assistant.notebook.get_all_notes())
+            print(add_note())
 
         elif command == "edit-note":
-            note_name = input("Enter the name of the note you want to edit: ")
-            new_text = input("Enter the new text for the note: ")
-            print(personal_assistant.notebook.edit_note(note_name, new_text))
+            print(edit_note())
+
+        elif command == "remove-note":
+            print(remove_note())
+
+        elif command == "show-notes":
+            print(show_notes())
 
         elif command == "search-note":
-            search_term = input("Enter search query: ")
-            print(personal_assistant.notebook.search_note(search_term))
+            print(search_note())
 
         elif command == "add-email":
             print(add_email(args))

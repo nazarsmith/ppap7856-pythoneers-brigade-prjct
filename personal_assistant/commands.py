@@ -1,4 +1,5 @@
 import random
+from functools import wraps
 
 from personal_assistant.src.address_book.record import Record
 from personal_assistant.src.exceptions.exceptions import WrongInfoException, NoValue, WrongDate, WrongEmail, \
@@ -13,13 +14,23 @@ def greeting():
     return prompt
 
 
+def cache_data(command):
+    @wraps(command)
+    def wrapper(*args, **kwargs):
+        result = command(*args, **kwargs)
+        personal_assistant.cache_data()
+        return result
+
+    return wrapper
+
+
+@cache_data
 @wrong_input_handling
 def add_contact(args):
     check_args(args, WrongInfoException())
 
     name = args[0]
     phone = args[-1]
-    confirm = None
 
     if name in list(personal_assistant.address_book.data.keys()):
 
@@ -31,8 +42,8 @@ def add_contact(args):
             pass
 
         confirm = input("A contact with this name found. Update it? yes / no: ")
-        confirm.lower()
-        if confirm in ["yes", "1", "affirmative", "y"]:
+
+        if confirm.lower() in ["yes", "1", "affirmative", "y"]:
             book_entry.add_phone(args[-1])
         else:
             return "Cancelling contact addition."
@@ -45,6 +56,7 @@ def add_contact(args):
     return "Contact added."
 
 
+@cache_data
 @wrong_input_handling
 def change_contact(args):
     check_args(args, ValueError())
@@ -86,6 +98,7 @@ def show_all():
     return '\n'.join(all_records)
 
 
+@cache_data
 @wrong_input_handling
 def add_bd(args):
     check_args(args, WrongDate())
@@ -110,6 +123,7 @@ def birthdays_next_week():
     return personal_assistant.address_book.birthdays_per_week()
 
 
+@cache_data
 @wrong_input_handling
 def remove_number(args):
     check_args(args, WrongInfoException())
@@ -118,6 +132,7 @@ def remove_number(args):
     return f"The number was deleted from {args[0]}'s list of phone numbers."
 
 
+@cache_data
 @wrong_input_handling
 def del_contact(args):
     check_args(args, NoValue())
@@ -134,6 +149,7 @@ def num_records():
         return message + 'Type "all" to list all of them.'
 
 
+@cache_data
 @wrong_input_handling
 def add_email(args):
     check_args(args, WrongEmail())
@@ -142,6 +158,7 @@ def add_email(args):
     return f"Email address {args[1]} added successfully to contact {args[0]}."
 
 
+@cache_data
 @wrong_input_handling
 def change_email(args):
     if len(args) == 2:
@@ -165,6 +182,7 @@ def show_email(args):
         return "No emails found."
 
 
+@cache_data
 @wrong_input_handling
 def delete_email(args):
     check_args(args, WrongEmail())
@@ -173,6 +191,7 @@ def delete_email(args):
     return "The email address was deleted."
 
 
+@cache_data
 @wrong_input_handling
 def add_address(args):
     try:
@@ -185,6 +204,7 @@ def add_address(args):
     return f"Address was added successfully to contact {args[0]}."
 
 
+@cache_data
 @wrong_input_handling
 def change_address(args):
     try:
@@ -208,6 +228,7 @@ def show_address(args):
     return "No associated address found."
 
 
+@cache_data
 @wrong_input_handling
 def delete_address(args=None):
     if not args:
@@ -215,3 +236,35 @@ def delete_address(args=None):
     contact = get_contact(personal_assistant.address_book, args[0])
     contact.delete_address()
     return "The address was deleted."
+
+
+@cache_data
+@wrong_input_handling
+def add_note():
+    return personal_assistant.notebook.add_note()
+
+
+@cache_data
+@wrong_input_handling
+def remove_note():
+    note_name = input("Enter the name of the note to delete: ")
+    return personal_assistant.notebook.remove_note(note_name)
+
+
+@wrong_input_handling
+def show_notes():
+    return personal_assistant.notebook.get_all_notes()
+
+
+@cache_data
+@wrong_input_handling
+def edit_note():
+    note_name = input("Enter the name of the note you want to edit: ")
+    new_text = input("Enter the new text for the note: ")
+    return personal_assistant.notebook.edit_note(note_name, new_text)
+
+
+@wrong_input_handling
+def search_note():
+    search_term = input("Enter search query: ")
+    return personal_assistant.notebook.search_note(search_term)
