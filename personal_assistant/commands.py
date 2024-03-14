@@ -65,28 +65,25 @@ def show_phone(args):
 
 @wrong_input_handling
 def show_all():
-    names = list(personal_assistant.address_book.keys())
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
-    if not names:
-        yield "No contacts found. " + add_phone_message
+    if not personal_assistant.address_book.data:
+        return "No contacts found. " + add_phone_message
 
-    for i in range(len(personal_assistant.address_book.keys())):
-        contact = get_contact(personal_assistant.address_book, names[i])
-        found_phones = contact.list_str_rep(contact.phones)
+    all_records = []
 
-        if not found_phones:
-            yield "{:>2}. | {:^20}\n".format(i + 1, names[i]) + add_phone_message
-            continue
+    for i, record in enumerate(personal_assistant.address_book.data.values()):
+        name = record.name.value
+        phones = '\n'.join(p.value for p in record.phones) if record.phones else ''
+        emails = '\n'.join(e.value for e in record.emails) if record.emails else ''
+        birthday = str(record.birthday.value.date()) if record.birthday else ''
+        address = record.address.value if record.address else ''
 
-        message = "{:>2}. | {:^20} | {:>10}".format(i + 1, names[i], found_phones[0])
-
-        if len(found_phones) > 1:
-            formatted_phones = "".join(
-                ["\n{:>39}".format(phone) for phone in found_phones[1:]]
+        all_records.append(
+            '{:>3} | {:^20} | {:^10} | {:^20} | {:^10} | {:<50}'.format(
+                i, name, phones, emails, birthday, address
             )
-            yield message + formatted_phones
-        elif len(found_phones) == 1:
-            yield message
+        )
+    return '\n'.join(all_records)
 
 
 @wrong_input_handling
