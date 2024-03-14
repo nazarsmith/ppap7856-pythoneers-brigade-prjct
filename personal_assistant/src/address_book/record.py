@@ -1,5 +1,5 @@
-from personal_assistant.src.address_book.fields import Phone, Name
-from personal_assistant.src.exceptions.exceptions import NoValue, WrongDate
+from personal_assistant.src.address_book.fields import Name, Phone, Email, Birthday, Address
+from personal_assistant.src.exceptions.exceptions import NoValue, WrongDate, WrongEmail
 
 
 def error_handler(function):
@@ -26,6 +26,9 @@ def error_handler(function):
         except WrongDate as err:
             raise WrongDate from err
 
+        except WrongEmail as err:
+            raise WrongEmail(err)
+
         except ValueError:
             raise ValueError(
                 f"{args[0]} is not on the list of {self.name}'s phone numbers."
@@ -46,9 +49,10 @@ class Record:
         self.address = None
 
     def __str__(self):
-        return f"Contact name: {self.name.item}, phones: {'; '.join(p.item for p in self.phones)}"
+        return f"Contact name: {self.name.value}, phones: {'; '.join(p.item for p in self.phones)}"
 
-    def list_str_rep(self, lst: list):
+    @staticmethod
+    def list_str_rep(lst: list):
         return [str(i) for i in lst]
 
     @error_handler
@@ -87,7 +91,8 @@ class Record:
     def add_email(self, email: str = None):
         if not email:
             raise NoValue("No email address was provided.")
-        self.emails.append(Email(email))
+        e_mail = Email(email)
+        self.emails.append(e_mail)
 
     @error_handler
     def change_email(self, old_email, new_email):

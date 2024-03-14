@@ -1,9 +1,10 @@
 import random
 
 from personal_assistant.src.address_book.record import Record
-from personal_assistant.src.exceptions.exceptions import WrongInfoException, NoValue, WrongDate
-from personal_assistant.src.personal_assistant import PersonalAssistant
-from personal_assistant.src.utils import check_args, wrong_input_handling, get_contact
+from personal_assistant.src.exceptions.exceptions import WrongInfoException, NoValue, WrongDate, WrongEmail, \
+    WrongAddress
+from personal_assistant.src.personal_assistant import personal_assistant
+from personal_assistant.src.utils import check_args, wrong_input_handling, get_contact, pre_check_addr
 
 
 def greeting():
@@ -13,7 +14,7 @@ def greeting():
 
 
 @wrong_input_handling
-def add_contact(personal_assistant: PersonalAssistant, args):
+def add_contact(args):
     check_args(args, WrongInfoException())
 
     name = args[0]
@@ -45,7 +46,7 @@ def add_contact(personal_assistant: PersonalAssistant, args):
 
 
 @wrong_input_handling
-def change_contact(personal_assistant: PersonalAssistant, args):
+def change_contact(args):
     check_args(args, ValueError())
 
     contact = get_contact(personal_assistant.address_book, args[0])
@@ -54,7 +55,7 @@ def change_contact(personal_assistant: PersonalAssistant, args):
 
 
 @wrong_input_handling
-def show_phone(personal_assistant, args):
+def show_phone(args):
     check_args(args, NoValue())
     contact = get_contact(personal_assistant.address_book, args[0])
     found_phones = contact.list_str_rep(contact.phones)
@@ -63,7 +64,7 @@ def show_phone(personal_assistant, args):
 
 
 @wrong_input_handling
-def show_all(personal_assistant):
+def show_all():
     names = list(personal_assistant.address_book.keys())
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
     if not names:
@@ -89,7 +90,7 @@ def show_all(personal_assistant):
 
 
 @wrong_input_handling
-def add_bd(personal_assistant, args):
+def add_bd(args):
     check_args(args, WrongDate())
     contact = get_contact(personal_assistant.address_book, args[0])
     contact.add_birthday(args[1])
@@ -97,7 +98,7 @@ def add_bd(personal_assistant, args):
 
 
 @wrong_input_handling
-def show_birthday(personal_assistant, args):
+def show_birthday(args):
     check_args(args, NoValue())
     contact = get_contact(personal_assistant.address_book, args[0])
     bd = contact.birthday
@@ -108,12 +109,12 @@ def show_birthday(personal_assistant, args):
 
 
 @wrong_input_handling
-def birthdays_next_week(personal_assistant):
-    return personal_assistant.birthdays_per_week()
+def birthdays_next_week():
+    return personal_assistant.address_book.birthdays_per_week()
 
 
 @wrong_input_handling
-def remove_number(personal_assistant, args):
+def remove_number(args):
     check_args(args, WrongInfoException())
     contact = get_contact(personal_assistant, args[0])
     contact.remove_phone(args[-1])
@@ -121,40 +122,99 @@ def remove_number(personal_assistant, args):
 
 
 @wrong_input_handling
-def del_contact(personal_assistant, args):
+def del_contact(args):
     check_args(args, NoValue())
-    personal_assistant.delete(args[0])
+    personal_assistant.address_book.delete(args[0])
     return "The contact was deleted."
 
 
 @wrong_input_handling
-def num_records(personal_assistant):
-    message = f"The address book has {personal_assistant.records} entries. "
-    if not personal_assistant.records:
+def num_records():
+    message = f"The address book has {personal_assistant.address_book.records} entries. "
+    if not personal_assistant.address_book.records:
         return message + 'Enter "add <name> <number>" to add a contact.'
     else:
         return message + 'Type "all" to list all of them.'
 
 
-def add_email(personal_assistant, args):
-    pass
+@wrong_input_handling
+def add_email(args):
+    check_args(args, WrongEmail())
+    contact = get_contact(personal_assistant.address_book, args[0])
+    contact.add_email(args[1])
+    return f"Email address {args[1]} added successfully to contact {args[0]}."
 
 
-def change_email(personal_assistant, args):
-    pass
+@wrong_input_handling
+def change_email(args):
+    if len(args) == 2:
+        raise NoValue("Please provide a name, and old + new email addresses.")
+    else:
+        check_args(args, WrongEmail())
+    contact = get_contact(personal_assistant.address_book, args[0])
+    contact.change_email(args[1], args[2])
+    return f"Email address updated successfully for contact {args[0]}."
 
 
-def delete_email(personal_assistant, args):
-    pass
+@wrong_input_handling
+def show_email(args):
+    check_args(args, NoValue())
+    contact = get_contact(personal_assistant.address_book, args[0])
+    found_emails = contact.list_str_rep(contact.emails)
+    if found_emails:
+        found_emails = "; ".join(found_emails)
+        return f"{args[0]}'s emails: {found_emails}"
+    else:
+        return "No emails found."
 
 
-def add_address(personal_assistant, args):
-    pass
+@wrong_input_handling
+def delete_email(args):
+    check_args(args, WrongEmail())
+    contact = get_contact(personal_assistant.address_book, args[0])
+    contact.delete_email(args[1])
+    return "The email address was deleted."
 
 
-def change_address(personal_assistant, args):
-    pass
+@wrong_input_handling
+def add_address(args):
+    try:
+        address = pre_check_addr(args)
+        check_args([args[0], address], WrongAddress())
+    except IndexError:
+        raise WrongAddress("Neither name not address was provided. Try again.")
+    contact = personal_assistant.address_book.find(args[0])
+    contact.add_address(address)
+    return f"Address was added successfully to contact {args[0]}."
 
 
-def delete_address(personal_assistant):
-    pass
+@wrong_input_handling
+def change_address(args):
+    try:
+        address = pre_check_addr(args)
+        check_args([args[0], address], WrongAddress())
+    except IndexError:
+        raise WrongAddress("Neither name not address was provided. Try again.")
+    contact = get_contact(personal_assistant.address_book, args[0])
+    contact.change_address(address)
+    return f"Address updated successfully for contact {args[0]}."
+
+
+@wrong_input_handling
+def show_address(args):
+    check_args(args, NoValue())
+    contact = get_contact(personal_assistant.address_book, args[0])
+    add = contact.address
+    if add:
+        add = str(add)
+        return f"{args[0]}'s address: {add}"
+    return "No associated address found."
+
+
+@wrong_input_handling
+def delete_address(args=None):
+    if not args:
+        raise NoValue("No name was provided. Try again.")
+    contact = get_contact(personal_assistant.address_book, args[0])
+    contact.delete_address()
+    return "The address was deleted."

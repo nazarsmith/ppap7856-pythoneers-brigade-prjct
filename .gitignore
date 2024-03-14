@@ -3,6 +3,8 @@ __pycache__
 .venv
 .pytest_cache
 book
+pipfile
+pipfile.lock
 setup.py
 LICENSE
 *.egg-info

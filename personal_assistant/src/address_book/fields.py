@@ -1,36 +1,78 @@
 import re
 from datetime import datetime
 
-from personal_assistant.src.exceptions.exceptions import WrongDate
+from personal_assistant.src.exceptions.exceptions import WrongDate, WrongEmail, WrongAddress
 
 
 class Field:
-    def __init__(self, item):
-        self.item = item
+    def __init__(self, value):
+        self.value = self._has_validated(value)
+
+    @staticmethod
+    def _has_validated(value):
+        """
+        Field validation default implementation to be invoked
+        :param value: value to validate
+        :return: value
+        """
+        return value
 
     def __str__(self):
-        return str(self.item)
+        return str(self.value)
 
 
 class Name(Field):
     def __init__(self, name):
         super().__init__(name)
-        self.name = name
 
 
 class Phone(Field):
     def __init__(self, phone: str):
         super().__init__(phone)
-        self.phone = re.match("^[0-9]{10}$", phone).group(0)
+
+    @staticmethod
+    def _has_validated(value):
+        return re.match(r"^[0-9]{10}$", value).group(0)
 
 
 class Birthday(Field):
     def __init__(self, birthday: str):
         super().__init__(birthday)
+
+    @staticmethod
+    def _has_validated(value):
         try:
-            checked_birthday = re.match(
-                "^[0-3]{1}[0-9]{1}\.[0-1]{1}[0-9]{1}\.[0-9]{4}$", birthday
-            ).group(0)
+            birthday = re.match(r"^[0-3]{1}[0-9]{1}\.[0-1]{1}[0-9]{1}\.[0-9]{4}$", value).group(0)
         except AttributeError:
             raise WrongDate("The date must be of the DD.MM.YYYY format. Try again.")
-        self.birthday = datetime.strptime(checked_birthday, "%d.%m.%Y")
+        return datetime.strptime(birthday, "%d.%m.%Y")
+
+
+class Email(Field):
+    def __init__(self, email: str):
+        super().__init__(email)
+
+    @staticmethod
+    def _has_validated(email):
+        pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        if not re.match(pattern, email):
+            raise WrongEmail(
+                "Invalid email address format. Please enter the email address in the format example@example.com"
+            )
+        print("email", email)
+        return email
+
+
+class Address(Field):
+    def __init__(self, address: str):
+        super().__init__(address)
+
+    @staticmethod
+    def _has_validated(address):
+        # pattern = r"^\d+,\s*[\w\s]+\s*(?:street|St\.)?,\s*\w+,\s*\d{5}$"
+        pattern = r"^.{10,100}$"
+        if not re.match(pattern, address):
+            raise WrongAddress(
+                "Invalid address format. Please enter the address in the format: 'house number, street, city, postal code'."
+            )
+        return address

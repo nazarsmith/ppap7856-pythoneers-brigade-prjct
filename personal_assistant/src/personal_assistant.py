@@ -38,9 +38,12 @@ class PersonalAssistant:
         if notebook_cache.exists():
             with open(notebook_cache, "rb") as file:
                 cache = pickle.load(file)
-                self._notebook.data.update(cache)
+                self._notebook.data.extend(cache)
 
         if address_book_cache.exists():
             with open(address_book_cache, "rb") as file:
                 cache = pickle.load(file)
                 self._address_book.data.update(cache)
+
+
+personal_assistant = PersonalAssistant()
