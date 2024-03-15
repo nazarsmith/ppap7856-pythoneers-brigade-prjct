@@ -48,11 +48,11 @@ Run `pip install personal_assistant` to install the package and then `get-starte
 
 ## Notes Interface
 
-- `add + text` - to create a note;
-- `search / seek / find / filter / grep + text` - to show one note;
-- `edit / upd / update / change / ch new + text` - to change one note;
-- `remove / delete / del / rm + text` - to remove one note by ordinal number;
-- `find text` - to show all notes that contain the keyword;
+- `add` + `additional inputs` - to create a note;
+- `search / seek / find / filter / grep` + `additional name=<text> / tag=<text> / text=<text>` - to show one note;
+- `edit / upd / update / change / ch` + `additional inputs` - to change one note;
+- `remove / delete / del / rm` + `additional inputs` - to remove one note by ordinal number;
+- `find` + `additional name=<text> / tag=<text> / text=<text>` - to show all notes that contain the keyword;
 - `show / all / list / ls` - to list all notes with a ordinal number and note text;
 - `help` - to show the list of available commands for notes;
 - `back / return / -` - to exit notes;
