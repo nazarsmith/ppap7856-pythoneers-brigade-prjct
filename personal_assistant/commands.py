@@ -24,6 +24,17 @@ def greeting():
     return prompt
 
 
+def farewell():
+    prompt = random.choice(['Bye!', 'Good Bye!', 'See you!', 'Have a good one!', 'Farewell!', 'Ok, ok.. Get out!'])
+    return prompt
+
+
+def exit_assistant():
+    personal_assistant.cache_data()
+    print(farewell())
+    exit()
+
+
 def cache_data(command):
     @wraps(command)
     def wrapper(*args, **kwargs):
@@ -75,12 +86,12 @@ def find_contact(args):
         match = (
             True
             if (
-                query in str(record.name)
-                or query in str(record.address)
-                or True
-                in [query in email for email in record.list_str_rep(record.emails)]
-                or True
-                in [query in phone for phone in record.list_str_rep(record.phones)]
+                    query in str(record.name)
+                    or query in str(record.address)
+                    or True
+                    in [query in email for email in record.list_str_rep(record.emails)]
+                    or True
+                    in [query in phone for phone in record.list_str_rep(record.phones)]
             )
             else False
         )
@@ -119,7 +130,7 @@ def show_all():
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
     if not personal_assistant.address_book.data:
         return "No contacts found. " + add_phone_message
-    separator = f"{'-'*4}|{'-'*22}|{'-'*62}|"
+    separator = f"{'-' * 4}|{'-' * 22}|{'-' * 62}|"
 
     def compose_message(name: str, item: any):
 
