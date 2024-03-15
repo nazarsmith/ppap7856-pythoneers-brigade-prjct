@@ -1,37 +1,37 @@
 import personal_assistant.utils.messages as messages
 from personal_assistant.commands import (
-    add_contact,
-    show_all,
-    change_contact,
-    show_phone,
-    greeting,
-    remove_number,
-    add_bd,
-    show_birthday,
-    birthdays_next_week,
-    del_contact,
-    num_records,
-    add_email,
-    change_email,
-    delete_email,
     add_address,
-    change_address,
-    delete_address,
-    show_address,
-    show_email,
+    add_bd,
+    add_contact,
+    add_email,
     add_note,
+    birthdays_next_week,
+    change_address,
+    change_contact,
+    change_email,
+    del_contact,
+    delete_address,
+    delete_email,
     edit_note,
-    show_notes,
-    remove_note,
-    search_note,
     find_contact,
+    greeting,
+    num_records,
+    remove_note,
+    remove_number,
+    search_note,
+    show_address,
+    show_all,
+    show_birthday,
+    show_email,
+    show_notes,
+    show_phone,
 )
 from personal_assistant.src.personal_assistant import personal_assistant
 from personal_assistant.src.utils import parser
 
 
 def main():
-    print("Welcome to the assistant bot!")
+    print(messages.welcome_message)
 
     while True:
         user_input = input("How can I help you?\nEnter a command: ")
@@ -81,7 +81,7 @@ def main():
             print(num_records())
 
         elif command == "help":
-            print(messages.contacts_menu + messages.notes_menu)
+            print(messages.contacts_help_center + messages.notes_help_center)
 
         elif command == "add-note":
             print(add_note())
