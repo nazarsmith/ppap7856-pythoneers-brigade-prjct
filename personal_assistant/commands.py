@@ -114,7 +114,7 @@ def show_phone(args):
     return f"{args[0]}'s phone numbers: {found_phones}"
 
 
-# @wrong_input_handling
+@wrong_input_handling
 def show_all():
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
     if not personal_assistant.address_book.data:
