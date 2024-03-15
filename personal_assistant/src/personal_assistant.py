@@ -5,7 +5,9 @@ import pickle
 from personal_assistant.src.contacts.contacts import Contacts
 from personal_assistant.src.notes.notes import Notes
 
-_CACHE_DIR = pathlib.Path(__file__).parent.parent.joinpath('.cache')
+# from personal_assistant.src.
+
+_CACHE_DIR = pathlib.Path(__file__).parent.parent.joinpath(".cache")
 
 os.makedirs(_CACHE_DIR, exist_ok=True)
 

@@ -1,12 +1,15 @@
 from keras.utils import pad_sequences
-from keras.preprocessing.text import Tokenizer
+
+# from keras.preprocessing.text import Tokenizer
 import keras
-import tensorflow as tf
+
+# import tensorflow as tf
 import numpy as np
 
 
 import os
-from personal_assistant import resources
+
+# from personal_assistant import resources
 import pathlib
 
 import pickle
@@ -26,19 +29,14 @@ PAD = preprocessing_params["PAD"]
 TRUNC = preprocessing_params["TRUNC"]
 MAX_LEN = preprocessing_params["MAX_LEN"]
 
-print(PAD, TRUNC, MAX_LEN)
-
-# model = tf.saved_model.load(os.path.join(pth, "intent_categorization.h5"))
-# print(model)
-
-test_sentence = ["i want to add a contact"]
+test_sentence = ["i want to add a new contact"]
 
 test_sequence = tokenizer.texts_to_sequences(texts=test_sentence)
-print(test_sequence)
+
 test_sequence = pad_sequences(
     test_sequence, padding=PAD, truncating=TRUNC, maxlen=MAX_LEN
 )
-print(test_sequence, test_sequence.shape)
+
 labels_dict = {
     "add-note": 0,
     "add-note_tag": 1,
@@ -54,16 +52,12 @@ labels_dict = {
     "contact-change_phone": 11,
     "show-birthday": 12,
 }
-# print(dir(model))
-# predicted = model(shape = test_sequence.shape, dtype=tf.float32, name='inputs')
-# print(predicted)
 
 model = keras.models.load_model(os.path.join(pth, "intent_cat_v3"))
-# model = tf.saved_model.load(os.path.join(pth, "intent_cat_v2"))
-print(model.summary())
-predicted = model.predict(test_sequence)
 
-print(predicted)
+predicted = model.predict(test_sequence, verbose=0)
+
+# print(predicted)
 print(max(predicted[0]))
 print(np.where(predicted[0] == max(predicted[0]))[0][0])
 
