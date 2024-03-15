@@ -23,7 +23,8 @@ from personal_assistant.commands import (
     edit_note,
     show_notes,
     remove_note,
-    search_note
+    search_note,
+    find_contact,
 )
 from personal_assistant.src.personal_assistant import personal_assistant
 from personal_assistant.src.utils import parser
@@ -48,6 +49,9 @@ def main():
 
         elif command == "add":
             print(add_contact(args))
+
+        elif command == "find":
+            print(find_contact(args))
 
         elif command == "all":
             print(show_all())
