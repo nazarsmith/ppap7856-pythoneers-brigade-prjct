@@ -1,4 +1,5 @@
 from collections import UserList
+from itertools import groupby, chain, repeat, cycle
 
 from personal_assistant.src.notebook.note import Note
 
@@ -17,7 +18,10 @@ class NoteBook(UserList):
         return "Note added successfully."
 
     def get_all_notes(self):
-        return 'All Notes:\n' + '\n'.join(str(note) for note in self.data) if self.data else 'No notes found.'
+        if not self.data:
+            return "No notes found."
+
+        return "\nAll Notes:\n" + self._format_notes(self.data)
 
     def remove_note(self, name):
         matching_notes = [note for note in self.data if note.name == name]
@@ -56,6 +60,41 @@ class NoteBook(UserList):
 
         matching_notes = list(filter(matches, self.data))
 
-        return 'Matching Notes:\n' + '\n'.join(
-            str(n) for n in matching_notes
-        ) if matching_notes else 'No matching notes found.'
+        return (
+            '\nMatching Notes:\n' +
+            self._format_notes(matching_notes)
+            if matching_notes else 'No matching notes found.'
+        )
+
+    @staticmethod
+    def _format_notes(notes):
+        pattern = "{:>3} | {:^10} | {:<70} |\n"
+        separator = f"{'-' * 4}|{'-' * 12}|{'-' * 72}|"
+
+        def compose_row(name: str, item: any):
+
+            max_length = 70
+
+            if len(item) > max_length:
+                c = cycle(chain(repeat(0, max_length), repeat(1, max_length)))
+                first, *others = ["".join(g) for _, g in groupby(item, lambda x: next(c))]
+                first_line = pattern.format("", name, first)
+                other_lines = ''.join(pattern.format("", "", o) for o in others)
+                return first_line + other_lines
+
+            return pattern.format("", name, item)
+
+        table = []
+
+        for i, note in enumerate(notes):
+            table.append(separator + "\n" + pattern.format(i + 1, "Name", note.name) + separator)
+
+            tags = ", ".join(note.tags) if note.tags else "-"
+            text = note.text if note.text else "-"
+
+            row = compose_row("Tags", tags)
+            row += compose_row("Text", text).rstrip("\n")
+
+            table.append(row)
+
+        return "\n".join(table) + "\n" + separator
