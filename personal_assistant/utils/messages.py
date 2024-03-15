@@ -45,6 +45,5 @@ Commands:
     delete       <note_number>   # delete the note from your notes.
     all          # show all notes
 	find         <text>   # show all notes that contain the keyword. 
-
     back         # back to prev menu
 """

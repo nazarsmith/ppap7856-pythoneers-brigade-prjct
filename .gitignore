@@ -6,7 +6,6 @@ book
 pipfile
 pipfile.lock
 setup.py
-__init__.py
 LICENSE
 *.egg-info
 dist

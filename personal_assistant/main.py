@@ -1,17 +1,16 @@
 import personal_assistant.utils.messages as messages
-from personal_assistant.classes.personal_assistance_classes import PersonalAssistant
-from personal_assistant.utils.handler import (
-    add_bd,
+from personal_assistant.commands import (
     add_contact,
-    birthdays_next_week,
-    change_contact,
-    del_contact,
-    greeting,
-    num_records,
-    remove_number,
     show_all,
-    show_birthday,
+    change_contact,
     show_phone,
+    greeting,
+    remove_number,
+    add_bd,
+    show_birthday,
+    birthdays_next_week,
+    del_contact,
+    num_records,
     add_email,
     change_email,
     delete_email,
@@ -20,13 +19,17 @@ from personal_assistant.utils.handler import (
     delete_address,
     show_address,
     show_email,
+    add_note,
+    edit_note,
+    show_notes,
+    remove_note,
+    search_note
 )
-from personal_assistant.utils.utils import parser
+from personal_assistant.src.personal_assistant import personal_assistant
+from personal_assistant.src.utils import parser
 
 
 def main():
-    personal_assistant = PersonalAssistant()
-
     print("Welcome to the assistant bot!")
 
     while True:
@@ -44,80 +47,76 @@ def main():
             print(greeting(), end=" ")
 
         elif command == "add":
-            print(add_contact(personal_assistant, args))
+            print(add_contact(args))
 
         elif command == "all":
-            [print(c) for c in show_all(personal_assistant)]
+            print(show_all())
 
         elif command == "phone":
-            print(show_phone(personal_assistant, args))
+            print(show_phone(args))
 
         elif command == "change":
-            print(change_contact(personal_assistant, args))
+            print(change_contact(args))
 
         elif command == "remove-phone":
-            print(remove_number(personal_assistant, args))
+            print(remove_number(args))
 
         elif command == "add-birthday":
-            print(add_bd(personal_assistant, args))
+            print(add_bd(args))
 
         elif command == "show-birthday":
-            print(show_birthday(personal_assistant, args))
+            print(show_birthday(args))
 
         elif command == "birthdays":
-            [print(bd) for bd in birthdays_next_week(personal_assistant)]
+            [print(bd) for bd in birthdays_next_week()]
 
         elif command in ["delete", "remove"]:
-            print(del_contact(personal_assistant, args))
+            print(del_contact(args))
 
         elif command == "entries":
-            print(num_records(personal_assistant))
+            print(num_records())
 
         elif command == "help":
             print(messages.contacts_menu + messages.notes_menu)
 
         elif command == "add-note":
-            print(personal_assistant.add_note())
-
-        elif command == "remove-note":
-            note_name = input("Enter the name of the note to delete: ")
-            print(personal_assistant.remove_note(note_name))
-
-        elif command == "show-notes":
-            print(personal_assistant.get_all_notes())
+            print(add_note())
 
         elif command == "edit-note":
-            note_name = input("Enter the name of the note you want to edit: ")
-            new_text = input("Enter the new text for the note: ")
-            print(personal_assistant.edit_note(note_name, new_text))
+            print(edit_note())
+
+        elif command == "remove-note":
+            print(remove_note())
+
+        elif command == "show-notes":
+            print(show_notes())
 
         elif command == "search-note":
-            search_term = input("Enter search query: ")
-            print(personal_assistant.search_note(search_term))
+            print(search_note())
 
         elif command == "add-email":
-            print(add_email(personal_assistant, args))
+            print(add_email(args))
 
         elif command == "change-email":
-            print(change_email(personal_assistant, args))
+            print(change_email(args))
 
         elif command == "show-email":
-            print(show_email(personal_assistant, args))
+            print(show_email(args))
 
         elif command == "delete-email":
-            print(delete_email(personal_assistant, args))
+            print(delete_email(args))
 
         elif command == "add-address":
-            print(add_address(personal_assistant, args))
+            print(add_address(args))
 
         elif command == "change-address":
-            print(change_address(personal_assistant, args))
+            print(change_address(args))
 
         elif command == "show-address":
-            print(show_address(personal_assistant, args))
+            print(show_address(args))
 
         elif command == "delete-address":
-            print(delete_address(personal_assistant, args))
+            print(delete_address(args))
 
         elif not command:
             pass
