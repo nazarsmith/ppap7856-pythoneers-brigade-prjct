@@ -9,8 +9,6 @@ from personal_assistant.src.utils import parser
 
 def contacts_menu():
     while True:
-        print(contacts_interface_title)
-
         user_input = input("How can I help you?\nEnter a command: contacts: ")
         command, *args, message = parser(user_input)
 
@@ -89,8 +87,6 @@ def contacts_menu():
 
 def notes_menu():
     while True:
-        print(notes_interface_title)
-
         user_input = input("How can I help you?\nEnter a command: notes: ")
         command, *args, message = parser(user_input)
 
