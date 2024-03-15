@@ -86,8 +86,8 @@ class Notes(UserList):
 
         table = []
 
-        for i, note in enumerate(notes):
-            table.append(separator + "\n" + pattern.format(i + 1, "Name", note.name) + separator)
+        for i, note in enumerate(notes, start=1):
+            table.append(separator + "\n" + pattern.format(i, "Name", note.name) + separator)
 
             tags = ", ".join(note.tags) if note.tags else "-"
             text = note.text if note.text else "-"
