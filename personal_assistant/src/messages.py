@@ -1,9 +1,7 @@
 add_contact_success = "✅ or 🟢 Contact successfully added"
 add_note_success = "✅ or 🟢 Note successfully added"
 incorrect_phone_number = "❌ or 🔴 Incorrect phone number"
-incorrect_phone_number = "❌ or 🔴 Incorrect phone number"
 something_went_wrong = "🔴 Something went wrong. Please try again."
-
 
 welcome_message = """
 =============================================================================================
@@ -12,7 +10,7 @@ welcome_message = """
  / ____/  __/ /  (__  ) /_/ / / / / /_/ / /  / ___ |(__  |__  ) (__  ) /_/ /_/ / / / / /_  
 /_/    \___/_/  /____/\____/_/ /_/\__,_/_/  /_/  |_/____/____/_/____/\__/\__,_/_/ /_/\__/ "
 =============================================================================================
-👋👋 Welcome to the assistant bot! 👋👋
+👋👋 Welcome to the Personal Assistant bot! 👋👋
 
 Please select one of the menu options:
 >> contacts
@@ -20,28 +18,30 @@ Please select one of the menu options:
 >> exit/close
 """
 
-address_book_interface_title = """
+contacts_interface_title = """
 =====================================================================
-    ___       __    __                       __                __  
-   /   | ____/ /___/ /_______  __________   / /_  ____  ____  / /__
-  / /| |/ __  / __  / ___/ _ \/ ___/ ___/  / __ \/ __ \/ __ \/ //_/
- / ___ / /_/ / /_/ / /  /  __(__  |__  )  / /_/ / /_/ / /_/ / ,<   
-/_/  |_\__,_/\__,_/_/   \___/____/____/  /_.___/\____/\____/_/|_|  
+   ______            __             __      
+  / ____/___  ____  / /_____ ______/ /______
+ / /   / __ \/ __ \/ __/ __ `/ ___/ __/ ___/
+/ /___/ /_/ / / / / /_/ /_/ / /__/ /_(__  ) 
+\____/\____/_/ /_/\__/\__,_/\___/\__/____/  
+
 =====================================================================
-👋👋 Welcome to the address book! 👋👋
+👋👋 Welcome to the Contacts! 👋👋
 
 You can find out the available commands using "help"
 """
 
-notes_book_interface_title = """
+notes_interface_title = """
 =========================================================
-    _   __      __               __                __  
-   / | / /___  / /____  _____   / /_  ____  ____  / /__
-  /  |/ / __ \/ __/ _ \/ ___/  / __ \/ __ \/ __ \/ //_/
- / /|  / /_/ / /_/  __(__  )  / /_/ / /_/ / /_/ / ,<   
-/_/ |_/\____/\__/\___/____/  /_.___/\____/\____/_/|_|  
+    _   __      __           
+   / | / /___  / /____  _____
+  /  |/ / __ \/ __/ _ \/ ___/
+ / /|  / /_/ / /_/  __(__  ) 
+/_/ |_/\____/\__/\___/____/  
+
 ==========================================================
-👋👋 Welcome to the notes book! 👋👋
+👋👋 Welcome to the Notes! 👋👋
 
 You can find out the available commands using "help"
 """
@@ -49,7 +49,7 @@ You can find out the available commands using "help"
 contacts_help_center = """
 Usage: 
 
-    "ADDRESS_BOOK" COMMAND [OPTIONS]...
+    "CONTACTS" COMMAND [OPTIONS]...
 
 Commands:
     add                <name> <phone>   # add a new contact to your list.
@@ -79,12 +79,13 @@ Commands:
     birthdays          <count_of_days>   # show contacts that have their birthday within next N days
 
     back               # back to prev menu
+    exit|close         # exit
 """
 
 notes_help_center = """
 Usage: 
 
-    "NOTES_BOOK" COMMAND [OPTIONS]...
+    "NOTES" COMMAND [OPTIONS]...
 
 Commands:
     add          <text>   # create a new note.
@@ -92,7 +93,9 @@ Commands:
     change       <note_number> <new_text>   # change the content of a specific note.
     delete       <note_number>   # delete the note from your notes.
     all          # show all notes
-    find         tag=<text> or text=<text> or name=<name>  # show all notes that contain the keyword. 
+    find         tag=<text>; text=<text>; name=<name>  # show all notes that contain the keyword. 
 
     back         # back to prev menu
+    exit|close   # exit
+
 """

@@ -2,14 +2,14 @@ from personal_assistant.commands import add_contact, find_contact, show_all, sho
     add_bd, show_birthday, birthdays_next_week, del_contact, num_records, add_email, change_email, show_email, \
     delete_email, add_address, change_address, show_address, delete_address, add_note, edit_note, remove_note, \
     show_notes, search_note, exit_assistant
+from personal_assistant.src import messages
+from personal_assistant.src.messages import contacts_interface_title, notes_interface_title
 from personal_assistant.src.utils import parser
-from personal_assistant.utils import messages
-from personal_assistant.utils.messages import address_book_interface_title, notes_book_interface_title
 
 
 def contacts_menu():
     while True:
-        print(address_book_interface_title)
+        print(contacts_interface_title)
 
         user_input = input("How can I help you?\nEnter a command: contacts: ")
         command, *args, message = parser(user_input)
@@ -87,9 +87,9 @@ def contacts_menu():
             print("Invalid command. Please try again.")
 
 
-def notebook_menu():
+def notes_menu():
     while True:
-        print(notes_book_interface_title)
+        print(notes_interface_title)
 
         user_input = input("How can I help you?\nEnter a command: notes: ")
         command, *args, message = parser(user_input)

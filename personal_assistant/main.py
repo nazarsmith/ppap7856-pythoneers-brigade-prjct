@@ -1,8 +1,8 @@
-import personal_assistant.utils.messages as messages
+import personal_assistant.src.messages as messages
 from personal_assistant.commands import (
     greeting, exit_assistant,
 )
-from personal_assistant.menus import contacts_menu, notebook_menu
+from personal_assistant.menus import contacts_menu, notes_menu
 from personal_assistant.src.utils import parser
 
 
@@ -28,7 +28,7 @@ def main():
             contacts_menu()
 
         elif command == 'notes':
-            notebook_menu()
+            notes_menu()
 
         elif not command:
             pass
