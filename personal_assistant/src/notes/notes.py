@@ -1,9 +1,9 @@
 from collections import UserList
 
-from personal_assistant.src.notebook.note import Note
+from personal_assistant.src.notes.note import Note
 
 
-class NoteBook(UserList):
+class Notes(UserList):
     def __init__(self):
         super().__init__()
 
@@ -26,7 +26,7 @@ class NoteBook(UserList):
         if matching_notes:
             return f"{len(matching_notes)} notes with name '{name}' were removed successfully."
         else:
-            return f"Note '{name}' not found in the notebook."
+            return f"Note '{name}' not found in the Notes."
 
     def edit_note(self, name, new_text):
         matching_notes = [note for note in self.data if note.name == name]
@@ -35,7 +35,7 @@ class NoteBook(UserList):
             matching_notes[0].text = new_text
             return f"Note '{name}' edited successfully."
         else:
-            return f"Note '{name}' not found in the notebook."
+            return f"Note '{name}' not found in the Notes."
 
     def search_note(self, query: str):
         name = query.split("name=")[-1].split(';')[0] if 'name=' in query else None

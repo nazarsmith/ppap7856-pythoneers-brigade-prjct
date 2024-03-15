@@ -1,7 +1,7 @@
 import random
 from functools import wraps
 
-from personal_assistant.src.address_book.record import Record
+from personal_assistant.src.contacts.record import Record
 from personal_assistant.src.exceptions.exceptions import (
     WrongInfoException,
     NoValue,
@@ -24,6 +24,17 @@ def greeting():
     return prompt
 
 
+def farewell():
+    prompt = random.choice(['Bye!', 'Good Bye!', 'See you!', 'Have a good one!', 'Farewell!', 'Ok, ok.. Get out!'])
+    return prompt
+
+
+def exit_assistant():
+    personal_assistant.cache_data()
+    print(farewell())
+    exit()
+
+
 def cache_data(command):
     @wraps(command)
     def wrapper(*args, **kwargs):
@@ -42,9 +53,9 @@ def add_contact(args):
     name = args[0]
     phone = args[-1]
 
-    if name in list(personal_assistant.address_book.data.keys()):
+    if name in list(personal_assistant.contacts.data.keys()):
 
-        book_entry = personal_assistant.address_book.data[name]
+        book_entry = personal_assistant.contacts.data[name]
         try:
             if book_entry.find_phone(phone):
                 return "This phone number is already associated with this contact."
@@ -61,7 +72,7 @@ def add_contact(args):
     else:
         contact = Record(name)
         contact.add_phone(args[-1])
-        personal_assistant.address_book.add_record(contact)
+        personal_assistant.contacts.add_record(contact)
 
     return "Contact added."
 
@@ -75,19 +86,19 @@ def find_contact(args):
         match = (
             True
             if (
-                query in str(record.name)
-                or query in str(record.address)
-                or True
-                in [query in email for email in record.list_str_rep(record.emails)]
-                or True
-                in [query in phone for phone in record.list_str_rep(record.phones)]
+                    query in str(record.name)
+                    or query in str(record.address)
+                    or True
+                    in [query in email for email in record.list_str_rep(record.emails)]
+                    or True
+                    in [query in phone for phone in record.list_str_rep(record.phones)]
             )
             else False
         )
         return match
 
     matching_contacts = list(
-        filter(match_item, personal_assistant.address_book.data.values())
+        filter(match_item, personal_assistant.contacts.data.values())
     )
     message = "Contacts found:\n" + "\n".join(
         [str(contact) for contact in matching_contacts]
@@ -100,7 +111,7 @@ def find_contact(args):
 def change_contact(args):
     check_args(args, ValueError())
 
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     contact.edit_phone(args[1], args[-1])
     return "Contact updated."
 
@@ -108,7 +119,7 @@ def change_contact(args):
 @wrong_input_handling
 def show_phone(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     found_phones = contact.list_str_rep(contact.phones)
     found_phones = "; ".join(found_phones)
     return f"{args[0]}'s phone numbers: {found_phones}"
@@ -117,9 +128,9 @@ def show_phone(args):
 @wrong_input_handling
 def show_all():
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
-    if not personal_assistant.address_book.data:
+    if not personal_assistant.contacts.data:
         return "No contacts found. " + add_phone_message
-    separator = f"{'-'*4}|{'-'*22}|{'-'*62}|"
+    separator = f"{'-' * 4}|{'-' * 22}|{'-' * 62}|"
 
     def compose_message(name: str, item: any):
 
@@ -128,7 +139,7 @@ def show_all():
 
     all_records = []
 
-    for i, record in enumerate(personal_assistant.address_book.data.values()):
+    for i, record in enumerate(personal_assistant.contacts.data.values()):
         name = record.name.value
         all_records.append(
             separator
@@ -166,7 +177,7 @@ def show_all():
 @wrong_input_handling
 def add_bd(args):
     check_args(args, WrongDate())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     contact.add_birthday(args[1])
     return "Birthday date added."
 
@@ -174,7 +185,7 @@ def add_bd(args):
 @wrong_input_handling
 def show_birthday(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     bd = contact.birthday
     if bd:
         bd = str(bd)
@@ -184,7 +195,7 @@ def show_birthday(args):
 
 @wrong_input_handling
 def birthdays_next_week():
-    return personal_assistant.address_book.birthdays_per_week()
+    return personal_assistant.contacts.birthdays_per_week()
 
 
 @cache_data
@@ -200,16 +211,16 @@ def remove_number(args):
 @wrong_input_handling
 def del_contact(args):
     check_args(args, NoValue())
-    personal_assistant.address_book.delete(args[0])
+    personal_assistant.contacts.delete(args[0])
     return "The contact was deleted."
 
 
 @wrong_input_handling
 def num_records():
     message = (
-        f"The address book has {personal_assistant.address_book.records} entries. "
+        f"The Contacts has {personal_assistant.contacts.size} entries. "
     )
-    if not personal_assistant.address_book.records:
+    if not personal_assistant.contacts.size:
         return message + 'Enter "add <name> <number>" to add a contact.'
     else:
         return message + 'Type "all" to list all of them.'
@@ -219,7 +230,7 @@ def num_records():
 @wrong_input_handling
 def add_email(args):
     check_args(args, WrongEmail())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     contact.add_email(args[1])
     return f"Email address {args[1]} added successfully to contact {args[0]}."
 
@@ -231,7 +242,7 @@ def change_email(args):
         raise NoValue("Please provide a name, and old + new email addresses.")
     else:
         check_args(args, WrongEmail())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     contact.change_email(args[1], args[2])
     return f"Email address updated successfully for contact {args[0]}."
 
@@ -239,7 +250,7 @@ def change_email(args):
 @wrong_input_handling
 def show_email(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     found_emails = contact.list_str_rep(contact.emails)
     if found_emails:
         found_emails = "; ".join(found_emails)
@@ -252,7 +263,7 @@ def show_email(args):
 @wrong_input_handling
 def delete_email(args):
     check_args(args, WrongEmail())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     contact.delete_email(args[1])
     return "The email address was deleted."
 
@@ -264,7 +275,7 @@ def add_address(args):
         address = pre_check_addr(args)
     except IndexError:
         raise WrongAddress("Please provide both a name and address.")
-    contact = personal_assistant.address_book.find(args[0])
+    contact = personal_assistant.contacts.find(args[0])
     contact.add_address(address)
     return f"Address was added successfully to contact {args[0]}."
 
@@ -276,7 +287,7 @@ def change_address(args):
         address = pre_check_addr(args)
     except IndexError:
         raise WrongAddress("Please provide both a name and address.")
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     contact.change_address(address)
     return f"Address updated successfully for contact {args[0]}."
 
@@ -284,7 +295,7 @@ def change_address(args):
 @wrong_input_handling
 def show_address(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     add = contact.address
     if add:
         add = str(add)
@@ -297,7 +308,7 @@ def show_address(args):
 def delete_address(args=None):
     if not args:
         raise NoValue("No name was provided. Try again.")
-    contact = get_contact(personal_assistant.address_book, args[0])
+    contact = get_contact(personal_assistant.contacts, args[0])
     contact.delete_address()
     return "The address was deleted."
 
@@ -305,19 +316,19 @@ def delete_address(args=None):
 @cache_data
 @wrong_input_handling
 def add_note():
-    return personal_assistant.notebook.add_note()
+    return personal_assistant.notes.add_note()
 
 
 @cache_data
 @wrong_input_handling
 def remove_note():
     note_name = input("Enter the name of the note to delete: ")
-    return personal_assistant.notebook.remove_note(note_name)
+    return personal_assistant.notes.remove_note(note_name)
 
 
 @wrong_input_handling
 def show_notes():
-    return personal_assistant.notebook.get_all_notes()
+    return personal_assistant.notes.get_all_notes()
 
 
 @cache_data
@@ -325,10 +336,10 @@ def show_notes():
 def edit_note():
     note_name = input("Enter the name of the note you want to edit: ")
     new_text = input("Enter the new text for the note: ")
-    return personal_assistant.notebook.edit_note(note_name, new_text)
+    return personal_assistant.notes.edit_note(note_name, new_text)
 
 
 @wrong_input_handling
 def search_note():
     search_term = input("Enter search query: ")
-    return personal_assistant.notebook.search_note(search_term)
+    return personal_assistant.notes.search_note(search_term)
