@@ -14,11 +14,11 @@ Run `pip install personal_assistant` to install the package and then `get-starte
 - `notes` - to enter the notes interface;
 - `close` or `exit` - to exit the personal assistant;
 
-## Interface Address book
+## Address Book Interface
 
-- `add name phone` - to add a acontact and its phone number;
+- `add name phone` - to add a contact and its phone number;
 - `delete name` or `remove name` - to delete the contact;
-- `find` - to show one contact from the list;
+- `find text` - to search a contact from your list by name, phone, email, or address;
 - `entries` - to show the number of contacts;
 - `all` - to list all the contacts and their phone numbers;
 - `help` - to show the list of available commands for the address book;
@@ -34,7 +34,7 @@ Run `pip install personal_assistant` to install the package and then `get-starte
 - `show-birthday name` - to show birthday associate with the contact;
 - `change-birthday name` - to change the contact's date of birth;
 - `delete-birthday name` - to remove the contact's date of birth;
-- `birthdays` - to show the list of contacts who have a birthday within the following 7 days;
+- `birthdays` - to show a list of contacts with birthdays;
 
 ### Email
 - `add-email name email` - to add email;
@@ -48,7 +48,7 @@ Run `pip install personal_assistant` to install the package and then `get-starte
 - `change-address name old address new address` - to change the address;
 - `delete-address name` - to remove the address;
 
-## Interface Notes
+## Notes Interface
 
 - `add text` - to create a note;
 - `show note number` - to show one note;
@@ -59,11 +59,12 @@ Run `pip install personal_assistant` to install the package and then `get-starte
 - `help` - to show the list of available commands for notes;
 - `back` - to exit notes;
 
-## Optional
+<!-- ## Optional
 
 - `add-tag note number tag name` - to add a tag to a note;
 - `find-tag tag name` - to show all notes that contain the specified tag;
-- `sort-tag` - to sort notes by tag;
+- `sort-tag` - to sort notes by tag;-->
+
 
 ## Notes
 
