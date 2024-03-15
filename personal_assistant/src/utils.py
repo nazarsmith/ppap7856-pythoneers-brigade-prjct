@@ -93,6 +93,14 @@ def check_args(args, exc: Exception):
                 "Please provide an account name, old and new phone numbers."
             )
 
+    elif isinstance(exc, AttributeError):
+        if len(args) < 1:
+            raise WrongInfoException("No search query was provided. Please try again.")
+        elif len(args) > 1:
+            raise WrongInfoException(
+                "More than one search query found. Please enter one search query."
+            )
+
 
 def pre_check_addr(args):
     if args[1:]:

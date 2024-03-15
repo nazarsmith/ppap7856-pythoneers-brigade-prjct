@@ -54,7 +54,7 @@ Usage:
 Commands:
     add                <name> <phone>   # add a new contact to your list.
     delete/remove      <name>   # delete the contact from your list.
-    find               <name>   # search the contact from your list.
+    find               <text>   # search a contact from your list by name, phone, email, or address.
     entries            # show the count of contacts in your list.
     all                # show all contacts
 

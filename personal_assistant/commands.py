@@ -2,10 +2,20 @@ import random
 from functools import wraps
 
 from personal_assistant.src.address_book.record import Record
-from personal_assistant.src.exceptions.exceptions import WrongInfoException, NoValue, WrongDate, WrongEmail, \
-    WrongAddress
+from personal_assistant.src.exceptions.exceptions import (
+    WrongInfoException,
+    NoValue,
+    WrongDate,
+    WrongEmail,
+    WrongAddress,
+)
 from personal_assistant.src.personal_assistant import personal_assistant
-from personal_assistant.src.utils import check_args, wrong_input_handling, get_contact, pre_check_addr
+from personal_assistant.src.utils import (
+    check_args,
+    wrong_input_handling,
+    get_contact,
+    pre_check_addr,
+)
 
 
 def greeting():
@@ -56,6 +66,35 @@ def add_contact(args):
     return "Contact added."
 
 
+@wrong_input_handling
+def find_contact(args):
+    check_args(args, AttributeError())
+    query = args[0]
+
+    def match_item(record: Record):
+        match = (
+            True
+            if (
+                query in str(record.name)
+                or query in str(record.address)
+                or True
+                in [query in email for email in record.list_str_rep(record.emails)]
+                or True
+                in [query in phone for phone in record.list_str_rep(record.phones)]
+            )
+            else False
+        )
+        return match
+
+    matching_contacts = list(
+        filter(match_item, personal_assistant.address_book.data.values())
+    )
+    message = "Contacts found:\n" + "\n".join(
+        [str(contact) for contact in matching_contacts]
+    )
+    return message
+
+
 @cache_data
 @wrong_input_handling
 def change_contact(args):
@@ -85,17 +124,17 @@ def show_all():
 
     for i, record in enumerate(personal_assistant.address_book.data.values()):
         name = record.name.value
-        phones = '\n'.join(p.value for p in record.phones) if record.phones else ''
-        emails = '\n'.join(e.value for e in record.emails) if record.emails else ''
-        birthday = str(record.birthday.value.date()) if record.birthday else ''
-        address = record.address.value if record.address else ''
+        phones = "\n".join(p.value for p in record.phones) if record.phones else ""
+        emails = "\n".join(e.value for e in record.emails) if record.emails else ""
+        birthday = str(record.birthday.value.date()) if record.birthday else ""
+        address = record.address.value if record.address else ""
 
         all_records.append(
-            '{:>3} | {:^20} | {:^10} | {:^20} | {:^10} | {:<50}'.format(
+            "{:>3} | {:^20} | {:^10} | {:^20} | {:^10} | {:<50}".format(
                 i, name, phones, emails, birthday, address
             )
         )
-    return '\n'.join(all_records)
+    return "\n".join(all_records)
 
 
 @cache_data
@@ -142,7 +181,9 @@ def del_contact(args):
 
 @wrong_input_handling
 def num_records():
-    message = f"The address book has {personal_assistant.address_book.records} entries. "
+    message = (
+        f"The address book has {personal_assistant.address_book.records} entries. "
+    )
     if not personal_assistant.address_book.records:
         return message + 'Enter "add <name> <number>" to add a contact.'
     else:
@@ -196,9 +237,8 @@ def delete_email(args):
 def add_address(args):
     try:
         address = pre_check_addr(args)
-        check_args([args[0], address], WrongAddress())
     except IndexError:
-        raise WrongAddress("Neither name not address was provided. Try again.")
+        raise WrongAddress("Please provide both a name and address.")
     contact = personal_assistant.address_book.find(args[0])
     contact.add_address(address)
     return f"Address was added successfully to contact {args[0]}."
@@ -209,9 +249,8 @@ def add_address(args):
 def change_address(args):
     try:
         address = pre_check_addr(args)
-        check_args([args[0], address], WrongAddress())
     except IndexError:
-        raise WrongAddress("Neither name not address was provided. Try again.")
+        raise WrongAddress("Please provide both a name and address.")
     contact = get_contact(personal_assistant.address_book, args[0])
     contact.change_address(address)
     return f"Address updated successfully for contact {args[0]}."

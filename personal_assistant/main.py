@@ -13,6 +13,7 @@ from personal_assistant.commands import (
     delete_address,
     delete_email,
     edit_note,
+    find_contact,
     greeting,
     num_records,
     remove_note,
@@ -48,6 +49,9 @@ def main():
 
         elif command == "add":
             print(add_contact(args))
+
+        elif command == "find":
+            print(find_contact(args))
 
         elif command == "all":
             print(show_all())
