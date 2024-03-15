@@ -61,11 +61,11 @@ class Record:
             "; ".join(p.value for p in self.phones) if self.phones else "Not specified"
         )
 
-        conatct_str = (
+        contact_str = (
             f"Contact name: {self.name.value}, phones: {phones}, "
             + f"emails: {emails}, address: {address}, birthday: {bd}"
         )
-        return conatct_str
+        return contact_str
 
     @staticmethod
     def list_str_rep(lst: list):

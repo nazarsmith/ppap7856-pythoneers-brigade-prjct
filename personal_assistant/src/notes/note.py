@@ -5,4 +5,4 @@ class Note:
         self.text = text
 
     def __str__(self):
-        return f"{self.name}, {self.tags}, {self.text}"
+        return f"Name: {self.name}\nTags: {self.tags}\nText: {self.text}\n"
