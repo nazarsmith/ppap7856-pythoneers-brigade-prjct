@@ -4,12 +4,14 @@ from personal_assistant.commands import add_contact, find_contact, show_all, sho
     show_notes, search_note, exit_assistant
 from personal_assistant.src.utils import parser
 from personal_assistant.utils import messages
+from personal_assistant.utils.messages import address_book_interface_title, notes_book_interface_title
 
 
 def contacts_menu():
     while True:
-        user_input = input("How can I help you?\nEnter a command: contacts: ")
+        print(address_book_interface_title)
 
+        user_input = input("How can I help you?\nEnter a command: contacts: ")
         command, *args, message = parser(user_input)
 
         if command in ('exit', 'close'):
@@ -87,6 +89,8 @@ def contacts_menu():
 
 def notebook_menu():
     while True:
+        print(notes_book_interface_title)
+
         user_input = input("How can I help you?\nEnter a command: notes: ")
         command, *args, message = parser(user_input)
 
