@@ -25,7 +25,16 @@ def greeting():
 
 
 def farewell():
-    prompt = random.choice(['Bye!', 'Good Bye!', 'See you!', 'Have a good one!', 'Farewell!', 'Ok, ok.. Get out!'])
+    prompt = random.choice(
+        [
+            "Bye!",
+            "Good Bye!",
+            "See you!",
+            "Have a good one!",
+            "Farewell!",
+            "Ok, ok.. Get out!",
+        ]
+    )
     return prompt
 
 
@@ -86,12 +95,12 @@ def find_contact(args):
         match = (
             True
             if (
-                    query in str(record.name)
-                    or query in str(record.address)
-                    or True
-                    in [query in email for email in record.list_str_rep(record.emails)]
-                    or True
-                    in [query in phone for phone in record.list_str_rep(record.phones)]
+                query in str(record.name)
+                or query in str(record.address)
+                or True
+                in [query in email for email in record.list_str_rep(record.emails)]
+                or True
+                in [query in phone for phone in record.list_str_rep(record.phones)]
             )
             else False
         )
@@ -111,7 +120,7 @@ def find_contact(args):
 def change_contact(args):
     check_args(args, ValueError())
 
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.edit_phone(args[1], args[-1])
     return "Contact updated."
 
@@ -119,7 +128,7 @@ def change_contact(args):
 @wrong_input_handling
 def show_phone(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     found_phones = contact.list_str_rep(contact.phones)
     found_phones = "; ".join(found_phones)
     return f"{args[0]}'s phone numbers: {found_phones}"
@@ -177,7 +186,7 @@ def show_all():
 @wrong_input_handling
 def add_bd(args):
     check_args(args, WrongDate())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.add_birthday(args[1])
     return "Birthday date added."
 
@@ -185,7 +194,7 @@ def add_bd(args):
 @wrong_input_handling
 def show_birthday(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     bd = contact.birthday
     if bd:
         bd = str(bd)
@@ -194,8 +203,19 @@ def show_birthday(args):
 
 
 @wrong_input_handling
-def birthdays_next_week():
-    return personal_assistant.contacts.birthdays_per_week()
+def birthdays_num_days(args):
+    if not args:
+        days = 7
+    else:
+        try:
+            days = int(args[0])
+
+        except Exception:
+            raise WrongInfoException(
+                "Please provide a single valid digit for the number of days."
+            )
+    birthdays = personal_assistant.contacts.birthdays_num_days(days)
+    return "\n".join(birthdays)
 
 
 @cache_data
@@ -217,9 +237,7 @@ def del_contact(args):
 
 @wrong_input_handling
 def num_records():
-    message = (
-        f"The Contacts has {personal_assistant.contacts.size} entries. "
-    )
+    message = f"The Contacts has {personal_assistant.contacts.size} entries. "
     if not personal_assistant.contacts.size:
         return message + 'Enter "add <name> <number>" to add a contact.'
     else:
@@ -287,7 +305,7 @@ def change_address(args):
         address = pre_check_addr(args)
     except IndexError:
         raise WrongAddress("Please provide both a name and address.")
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.change_address(address)
     return f"Address updated successfully for contact {args[0]}."
 
@@ -295,7 +313,7 @@ def change_address(args):
 @wrong_input_handling
 def show_address(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     add = contact.address
     if add:
         add = str(add)
