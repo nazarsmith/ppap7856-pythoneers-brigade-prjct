@@ -1,4 +1,10 @@
-from personal_assistant.src.address_book.fields import Name, Phone, Email, Birthday, Address
+from personal_assistant.src.address_book.fields import (
+    Name,
+    Phone,
+    Email,
+    Birthday,
+    Address,
+)
 from personal_assistant.src.exceptions.exceptions import NoValue, WrongDate, WrongEmail
 
 
@@ -7,9 +13,7 @@ def error_handler(function):
         try:
             return function(self, *args, **kwargs)
         except IndexError:
-            raise IndexError(
-                "This phone number is not associated with this contact."
-            )
+            raise IndexError("This phone number is not associated with this contact.")
 
         except NoValue as err:
             raise NoValue from err
@@ -19,8 +23,7 @@ def error_handler(function):
 
         except AttributeError:
             raise AttributeError(
-                "The phone number must be 10 digits long "
-                + "and contain only digits."
+                "The phone number must be 10 digits long " + "and contain only digits."
             )
 
         except WrongDate as err:
@@ -49,7 +52,20 @@ class Record:
         self.address = None
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.item for p in self.phones)}"
+        address = self.address if self.address else "No associated address found"
+        bd = self.birthday if self.birthday else "Not indicated"
+        emails = (
+            "; ".join(e.value for e in self.emails) if self.emails else "Not specified"
+        )
+        phones = (
+            "; ".join(p.value for p in self.phones) if self.phones else "Not specified"
+        )
+
+        conatct_str = (
+            f"Contact name: {self.name.value}, phones: {phones}, "
+            + f"emails: {emails}, address: {address}, birthday: {bd}"
+        )
+        return conatct_str
 
     @staticmethod
     def list_str_rep(lst: list):

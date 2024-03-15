@@ -1,7 +1,11 @@
 import re
 from datetime import datetime
 
-from personal_assistant.src.exceptions.exceptions import WrongDate, WrongEmail, WrongAddress
+from personal_assistant.src.exceptions.exceptions import (
+    WrongDate,
+    WrongEmail,
+    WrongAddress,
+)
 
 
 class Field:
@@ -42,7 +46,9 @@ class Birthday(Field):
     @staticmethod
     def _has_validated(value):
         try:
-            birthday = re.match(r"^[0-3]{1}[0-9]{1}\.[0-1]{1}[0-9]{1}\.[0-9]{4}$", value).group(0)
+            birthday = re.match(
+                r"^[0-3]{1}[0-9]{1}\.[0-1]{1}[0-9]{1}\.[0-9]{4}$", value
+            ).group(0)
         except AttributeError:
             raise WrongDate("The date must be of the DD.MM.YYYY format. Try again.")
         return datetime.strptime(birthday, "%d.%m.%Y")
@@ -59,7 +65,6 @@ class Email(Field):
             raise WrongEmail(
                 "Invalid email address format. Please enter the email address in the format example@example.com"
             )
-        print("email", email)
         return email
 
 
@@ -69,10 +74,10 @@ class Address(Field):
 
     @staticmethod
     def _has_validated(address):
-        # pattern = r"^\d+,\s*[\w\s]+\s*(?:street|St\.)?,\s*\w+,\s*\d{5}$"
         pattern = r"^.{10,100}$"
         if not re.match(pattern, address):
             raise WrongAddress(
-                "Invalid address format. Please enter the address in the format: 'house number, street, city, postal code'."
+                "Invalid address format - it must be between 10 and 100 characters long. "
+                + "Please enter the house number, street, city, and postal code'."
             )
         return address
