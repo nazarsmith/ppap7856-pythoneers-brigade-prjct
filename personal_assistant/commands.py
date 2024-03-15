@@ -114,27 +114,52 @@ def show_phone(args):
     return f"{args[0]}'s phone numbers: {found_phones}"
 
 
-@wrong_input_handling
+# @wrong_input_handling
 def show_all():
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
     if not personal_assistant.address_book.data:
         return "No contacts found. " + add_phone_message
+    separator = f"{'-'*4}|{'-'*22}|{'-'*62}|"
+
+    def compose_message(name: str, item: any):
+
+        line = "{:>3} | {:^20} | {:^60} |\n".format("", name, item)
+        return line
 
     all_records = []
 
     for i, record in enumerate(personal_assistant.address_book.data.values()):
         name = record.name.value
-        phones = "\n".join(p.value for p in record.phones) if record.phones else ""
-        emails = "\n".join(e.value for e in record.emails) if record.emails else ""
-        birthday = str(record.birthday.value.date()) if record.birthday else ""
-        address = record.address.value if record.address else ""
-
         all_records.append(
-            "{:>3} | {:^20} | {:^10} | {:^20} | {:^10} | {:<50}".format(
-                i, name, phones, emails, birthday, address
-            )
+            separator
+            + "\n{:>3} | {:^20} | {:^60} |\n".format(i + 1, "Name", name)
+            + separator
         )
-    return "\n".join(all_records)
+
+        phones = (
+            "; ".join(p.value for p in record.phones)
+            if record.phones
+            else "No associated phones found"
+        )
+        emails = (
+            "; ".join(e.value for e in record.emails)
+            if record.emails
+            else "No emails on record"
+        )
+        birthday = (
+            str(record.birthday.value.date()) if record.birthday else "Not indicated"
+        )
+        address = (
+            record.address.value if record.address else "No current address stored"
+        )
+
+        message = compose_message("Phone numbers", phones)
+        message += compose_message("Emails", emails)
+        message += compose_message("Birthday", birthday)
+        message += compose_message("Address", address).rstrip("\n")
+
+        all_records.append(message)
+    return "\n".join(all_records) + "\n" + separator
 
 
 @cache_data
