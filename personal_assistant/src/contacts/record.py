@@ -1,4 +1,4 @@
-from personal_assistant.src.address_book.fields import (
+from personal_assistant.src.contacts.fields import (
     Name,
     Phone,
     Email,

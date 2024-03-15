@@ -22,17 +22,19 @@ def error_handler(function):
     return handle
 
 
-class AddressBook(UserDict):
+class Contacts(UserDict):
 
     def __init__(self):
         super().__init__()
         self.data = {}
-        self.records = 0
+
+    @property
+    def size(self):
+        return len(self.data)
 
     @error_handler
     def add_record(self, record):
         self.data.update({str(record.name): record})
-        self.records += 1
 
     @error_handler
     def find(self, name=None):
@@ -45,7 +47,6 @@ class AddressBook(UserDict):
         if not name:
             raise NoValue("The name of a contact not provided.")
         self.data.pop(name)
-        self.records -= 1
 
     @error_handler
     def birthdays_per_week(self):
