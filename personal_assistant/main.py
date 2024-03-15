@@ -50,7 +50,7 @@ def main():
         elif command == "add":
             print(add_contact(args))
 
-        elif command == "find-contact":
+        elif command == "find":
             print(find_contact(args))
 
         elif command == "all":
