@@ -1,17 +1,30 @@
+from prompt_toolkit import PromptSession
+from prompt_toolkit.completion import WordCompleter
+
 import personal_assistant.src.messages as messages
-from personal_assistant.commands import (
-    greeting,
-    exit_assistant,
-)
+from personal_assistant.commands import exit_assistant, greeting
 from personal_assistant.menus import contacts_menu, notes_menu
 from personal_assistant.src.utils import parser
+
+menu_commands = [
+    "hello",
+    "hi",
+    "greetings",
+    "contacts",
+    "notes",
+    "help",
+    "exit",
+    "close",
+]
 
 
 def main():
     print(messages.welcome_message)
+    commands_completer = WordCompleter(menu_commands)
+    session = PromptSession(completer=commands_completer)
 
     while True:
-        user_input = input("Enter command: main menu: ")
+        user_input = session.prompt("Enter command: main menu: ")
         command, *args, message = parser(user_input)
         if message:
             print(message)
