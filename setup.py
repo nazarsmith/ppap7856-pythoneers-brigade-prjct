@@ -6,7 +6,7 @@ with open("README.md", "r") as description:
 
 setuptools.setup(
     name="py_brigade_personal_assistant",
-    version="0.0.1",
+    version="0.0.4",
     description="A personal assistant.",
     long_description=info,
     long_description_content_type="text/markdown",

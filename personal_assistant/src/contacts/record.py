@@ -5,7 +5,12 @@ from personal_assistant.src.contacts.fields import (
     Birthday,
     Address,
 )
-from personal_assistant.src.exceptions.exceptions import NoValue, WrongDate, WrongEmail
+from personal_assistant.src.exceptions.exceptions import (
+    NoValue,
+    WrongDate,
+    WrongEmail,
+    WrongAddress,
+)
 
 
 def error_handler(function):
@@ -16,7 +21,7 @@ def error_handler(function):
             raise IndexError("This phone number is not associated with this contact.")
 
         except NoValue as err:
-            raise NoValue from err
+            raise NoValue(err)
 
         except TypeError:
             raise TypeError("The phone number(s) not provided. Try again.")
@@ -31,6 +36,9 @@ def error_handler(function):
 
         except WrongEmail as err:
             raise WrongEmail(err)
+
+        except WrongAddress as err:
+            raise WrongAddress(err)
 
         except ValueError:
             raise ValueError(
@@ -112,13 +120,20 @@ class Record:
 
     @error_handler
     def change_email(self, old_email, new_email):
-        old_email_index = self.list_str_rep(self.emails).index(old_email)
+        try:
+            old_email_index = self.list_str_rep(self.emails).index(old_email)
+        except Exception:
+            raise NoValue(f"{old_email} is not on the list of {self.name}'s emails.")
         self.emails[old_email_index] = Email(new_email)
 
+    @error_handler
     def delete_email(self, email: str = None):
         if not email:
             raise NoValue("No email address was provided.")
-        email_index = self.list_str_rep(self.emails).index(email)
+        try:
+            email_index = self.list_str_rep(self.emails).index(email)
+        except Exception:
+            raise NoValue(f"{email} is not on the list of {self.name}'s emails.")
         self.emails.pop(email_index)
 
     def add_address(self, address: str = None):
@@ -126,6 +141,7 @@ class Record:
             raise NoValue("No address was provided.")
         self.address = Address(address)
 
+    @error_handler
     def change_address(self, new_address: str = ...):
         if not new_address:
             raise NoValue("No address was provided.")

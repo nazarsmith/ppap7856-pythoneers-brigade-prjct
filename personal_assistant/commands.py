@@ -15,6 +15,7 @@ from personal_assistant.src.utils import (
     wrong_input_handling,
     get_contact,
     pre_check_addr,
+    compose_contacts_list,
 )
 
 
@@ -90,6 +91,7 @@ def add_contact(args):
 def find_contact(args):
     check_args(args, AttributeError())
     query = args[0]
+    all_records = []
 
     def match_item(record: Record):
         match = (
@@ -109,10 +111,11 @@ def find_contact(args):
     matching_contacts = list(
         filter(match_item, personal_assistant.contacts.data.values())
     )
-    message = "Contacts found:\n" + "\n".join(
-        [str(contact) for contact in matching_contacts]
+
+    sep = compose_contacts_list(matching_contacts, all_records)
+    return (
+        "\n".join(all_records) + "\n" + sep if all_records else "No matching contacts."
     )
-    return message
 
 
 @cache_data
@@ -139,47 +142,11 @@ def show_all():
     add_phone_message = 'Enter "add <name> <number>" to add a contact.'
     if not personal_assistant.contacts.data:
         return "No contacts found. " + add_phone_message
-    separator = f"{'-' * 4}|{'-' * 22}|{'-' * 62}|"
 
-    def compose_message(name: str, item: any):
+    all_records = ["Here's the list of all contacts:"]
+    sep = compose_contacts_list(personal_assistant.contacts.data.values(), all_records)
 
-        line = "{:>3} | {:^20} | {:^60} |\n".format("", name, item)
-        return line
-
-    all_records = []
-
-    for i, record in enumerate(personal_assistant.contacts.data.values()):
-        name = record.name.value
-        all_records.append(
-            separator
-            + "\n{:>3} | {:^20} | {:^60} |\n".format(i + 1, "Name", name)
-            + separator
-        )
-
-        phones = (
-            "; ".join(p.value for p in record.phones)
-            if record.phones
-            else "No associated phones found"
-        )
-        emails = (
-            "; ".join(e.value for e in record.emails)
-            if record.emails
-            else "No emails on record"
-        )
-        birthday = (
-            str(record.birthday.value.date()) if record.birthday else "Not indicated"
-        )
-        address = (
-            record.address.value if record.address else "No current address stored"
-        )
-
-        message = compose_message("Phone numbers", phones)
-        message += compose_message("Emails", emails)
-        message += compose_message("Birthday", birthday)
-        message += compose_message("Address", address).rstrip("\n")
-
-        all_records.append(message)
-    return "\n".join(all_records) + "\n" + separator
+    return "\n".join(all_records) + "\n" + sep
 
 
 @cache_data
@@ -197,7 +164,7 @@ def show_birthday(args):
     contact = get_contact(personal_assistant, args[0])
     bd = contact.birthday
     if bd:
-        bd = str(bd)
+        bd = str(bd)[:11]
         return f"{args[0]}'s birthday: {bd}"
     return "No associated birthday date found."
 
@@ -248,7 +215,7 @@ def num_records():
 @wrong_input_handling
 def add_email(args):
     check_args(args, WrongEmail())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.add_email(args[1])
     return f"Email address {args[1]} added successfully to contact {args[0]}."
 
@@ -260,7 +227,7 @@ def change_email(args):
         raise NoValue("Please provide a name, and old + new email addresses.")
     else:
         check_args(args, WrongEmail())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.change_email(args[1], args[2])
     return f"Email address updated successfully for contact {args[0]}."
 
@@ -268,7 +235,7 @@ def change_email(args):
 @wrong_input_handling
 def show_email(args):
     check_args(args, NoValue())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     found_emails = contact.list_str_rep(contact.emails)
     if found_emails:
         found_emails = "; ".join(found_emails)
@@ -281,7 +248,7 @@ def show_email(args):
 @wrong_input_handling
 def delete_email(args):
     check_args(args, WrongEmail())
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.delete_email(args[1])
     return "The email address was deleted."
 
@@ -326,7 +293,7 @@ def show_address(args):
 def delete_address(args=None):
     if not args:
         raise NoValue("No name was provided. Try again.")
-    contact = get_contact(personal_assistant.contacts, args[0])
+    contact = get_contact(personal_assistant, args[0])
     contact.delete_address()
     return "The address was deleted."
 
