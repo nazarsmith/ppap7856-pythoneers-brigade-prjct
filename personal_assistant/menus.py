@@ -35,7 +35,7 @@ from personal_assistant.src.utils import parser
 
 def contacts_menu():
     while True:
-        user_input = input("How can I help you?\nEnter a command: contacts: ")
+        user_input = input("\nHow can I help you?\nEnter a command: contacts: ")
         command, *args, message = parser(user_input)
 
         if command in ("exit", "close"):
@@ -59,7 +59,7 @@ def contacts_menu():
         elif command == "show-phone":
             print(show_phone(args))
 
-        elif command == "change":
+        elif command == "change-phone":
             print(change_contact(args))
 
         elif command in ["remove-phone", "delete-phone"]:
@@ -77,7 +77,7 @@ def contacts_menu():
         elif command in ["delete", "remove"]:
             print(del_contact(args))
 
-        elif command == "entries":
+        elif command == "num-contacts":
             print(num_records())
 
         elif command == "add-email":
@@ -113,7 +113,7 @@ def contacts_menu():
 
 def notes_menu():
     while True:
-        user_input = input("How can I help you?\nEnter a command: notes: ")
+        user_input = input("\nHow can I help you?\nEnter a command: notes: ")
         command, *args, message = parser(user_input)
 
         if command in ("exit", "close"):

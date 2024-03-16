@@ -5,7 +5,7 @@ A CLI organizer that can help store contacts' phone numbers and birthday dates.
 
 ## Get Started
 
-Run `pip install personal_assistant` to install the package and then `get-started` to get started.<br><br>
+Run `pip install py_brigade_personal_assistant` to install the package and then `get-started` to get started.<br><br>
 
 **The list of available commands is as follows:**
 
@@ -18,15 +18,15 @@ Run `pip install personal_assistant` to install the package and then `get-starte
 
 - `add + name + phone` - to add a contact and its phone number;
 - `delete / remove + name` - to delete the contact;
-- `find + name` - to search a contact from your list by name, phone, email, or address;
-- `entries` - to show the number of contacts;
+- `find + text` - to search a contact from your list by name, phone, email, or address;
+- `num-contacts` - to show the number of contacts;
 - `all` - to list all the contacts and their phone numbers;
 - `help` - to show the list of available commands for the address book;
 - `back / return / -` - to exit the address book;
 
 ### Phone
 - `show-phone + name` - to list all the phone numbers associated with the contact; 
-- `change + name + old phone + new phone` - to change the phone number;
+- `change-phone + name + old phone + new phone` - to change the phone number;
 - `delete-phone / remove-phone + name + phone` - to remove the phone number;
 
 ### Birthday

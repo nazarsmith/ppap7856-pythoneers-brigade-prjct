@@ -77,7 +77,7 @@ def check_args(args, exc: Exception):
 
     elif isinstance(exc, NoValue):
         if len(args) != 1:
-            raise NoValue("Please provide a contact name.")
+            raise NoValue("Please provide a contact name only.")
 
     elif isinstance(exc, ValueError):
         if len(args) == 2:
@@ -159,3 +159,45 @@ def get_birthdays_num_days(users: list[any], days: int = ...):
 
     ## in case the list is needed elsewhere
     return birthdays
+
+
+def compose_contacts_list(found_contacts, all_records: list):
+    separator = f"{'-' * 4}|{'-' * 22}|{'-' * 62}|"
+
+    def compose_message(name: str, item: any):
+
+        line = "{:>3} | {:^20} | {:^60} |\n".format("", name, item)
+        return line
+
+    for i, record in enumerate(found_contacts):
+        name = record.name.value
+        all_records.append(
+            separator
+            + "\n{:>3} | {:^20} | {:^60} |\n".format(i + 1, "Name", name)
+            + separator
+        )
+
+        phones = (
+            "; ".join(p.value for p in record.phones)
+            if record.phones
+            else "No associated phones found"
+        )
+        emails = (
+            "; ".join(e.value for e in record.emails)
+            if record.emails
+            else "No emails on record"
+        )
+        birthday = (
+            str(record.birthday.value.date()) if record.birthday else "Not indicated"
+        )
+        address = (
+            record.address.value if record.address else "No current address stored"
+        )
+
+        message = compose_message("Phone numbers", phones)
+        message += compose_message("Emails", emails)
+        message += compose_message("Birthday", birthday)
+        message += compose_message("Address", address).rstrip("\n")
+        all_records.append(message)
+
+    return separator

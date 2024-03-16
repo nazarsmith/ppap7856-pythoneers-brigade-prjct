@@ -1,6 +1,7 @@
 import personal_assistant.src.messages as messages
 from personal_assistant.commands import (
-    greeting, exit_assistant,
+    greeting,
+    exit_assistant,
 )
 from personal_assistant.menus import contacts_menu, notes_menu
 from personal_assistant.src.utils import parser
@@ -22,12 +23,12 @@ def main():
             print(greeting(), end=" ")
 
         elif command == "help":
-            print(messages.contacts_help_center + messages.notes_help_center)
+            print(messages.main_help_center)
 
-        elif command == 'contacts':
+        elif command == "contacts":
             contacts_menu()
 
-        elif command == 'notes':
+        elif command == "notes":
             notes_menu()
 
         elif not command:
