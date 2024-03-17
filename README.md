@@ -70,8 +70,17 @@ Run `pip install py_brigade_personal_assistant` to install the package and then 
 2. Calling the command again with the same name will add another phone number to the same contact;
 3. `name` - a string with a minimum of 1 character and a maximum of 30 characters;
 4. `phone number` - only numbers, 10 characters;
-5. `birthday` - the format is DD.MM.YYYY or DD-MM-YYYY;
+5. `birthday` - the format is DD.MM.YYYY;
 6. `email` - a string, the format is example@example.com;
 7. `address` - a string that may contain spaces, commas, periods, etc.; the address contains from 10 to 100 characters;
 8. `text` - a string that can contain spaces, commas, periods, etc.; during note creation, it is assigned a ordinal number for management;
 9. The PA saves the progress upon exiting; this does not apply to the cases when it is forcefully shut down (e.g. keyboard interrupt);
+10. The PA supports machine-learning enabled intent recognition for all the intents except for:
+
+- show-phone
+- num-contacts
+- add-address
+- change-address
+- show-address
+- delete-address
++ these commands must be entered the way they are written above.

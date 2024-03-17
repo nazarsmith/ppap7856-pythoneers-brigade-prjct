@@ -15,13 +15,9 @@ from personal_assistant.src.utils import (
     wrong_input_handling,
     get_contact,
     pre_check_addr,
-    compose_contacts_list, str_items,
+    compose_contacts_list,
+    str_items,
 )
-
-
-def greeting():
-    prompt = random.choice(["Hello!", "Hi!", "Greetings!"])
-    return prompt
 
 
 def farewell():
@@ -56,7 +52,10 @@ def cache_data(command):
 
 @cache_data
 @wrong_input_handling
-def add_contact(args):
+def add_contact():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter the phone number: "))
     check_args(args, WrongInfoException())
 
     name = args[0]
@@ -87,20 +86,19 @@ def add_contact(args):
 
 
 @wrong_input_handling
-def find_contact(args):
+def find_contact():
+    args = []
+    args.append(input("Please enter a search qurey: "))
     check_args(args, AttributeError())
     query = args[0]
     all_records = []
 
     def matches(record: Record):
         match = (
-                query in str(record.name)
-                or
-                query in str(record.address)
-                or
-                any(query in email for email in str_items(record.emails))
-                or
-                any(query in phone for phone in str_items(record.phones))
+            query in str(record.name)
+            or query in str(record.address)
+            or any(query in email for email in str_items(record.emails))
+            or any(query in phone for phone in str_items(record.phones))
         )
 
         return match
@@ -115,7 +113,11 @@ def find_contact(args):
 
 @cache_data
 @wrong_input_handling
-def change_contact(args):
+def change_contact():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter the phone number you want to replace: "))
+    args.append(input("Please enter the new phone number: "))
     check_args(args, ValueError())
 
     contact = get_contact(personal_assistant, args[0])
@@ -124,7 +126,9 @@ def change_contact(args):
 
 
 @wrong_input_handling
-def show_phone(args):
+def show_phone():
+    args = []
+    args.append(input("Please enter a name: "))
     check_args(args, NoValue())
     contact = get_contact(personal_assistant, args[0])
     found_phones = str_items(contact.phones)
@@ -146,7 +150,10 @@ def show_all():
 
 @cache_data
 @wrong_input_handling
-def add_bd(args):
+def add_bd():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter the birthday date: "))
     check_args(args, WrongDate())
     contact = get_contact(personal_assistant, args[0])
     contact.add_birthday(args[1])
@@ -154,7 +161,9 @@ def add_bd(args):
 
 
 @wrong_input_handling
-def show_birthday(args):
+def show_birthday():
+    args = []
+    args.append(input("Please enter a name: "))
     check_args(args, NoValue())
     contact = get_contact(personal_assistant, args[0])
     bd = contact.birthday
@@ -165,7 +174,9 @@ def show_birthday(args):
 
 
 @wrong_input_handling
-def birthdays_num_days(args):
+def birthdays_num_days():
+    args = []
+    args.append(input("Please enter a number of days: "))
     if not args:
         days = 7
     else:
@@ -182,7 +193,10 @@ def birthdays_num_days(args):
 
 @cache_data
 @wrong_input_handling
-def remove_number(args):
+def remove_number():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter the phone number you want to remove: "))
     check_args(args, WrongInfoException())
     contact = get_contact(personal_assistant, args[0])
     contact.remove_phone(args[-1])
@@ -191,7 +205,9 @@ def remove_number(args):
 
 @cache_data
 @wrong_input_handling
-def del_contact(args):
+def del_contact():
+    args = []
+    args.append(input("Please enter a name: "))
     check_args(args, NoValue())
     personal_assistant.contacts.delete(args[0])
     return "The contact was deleted."
@@ -208,7 +224,10 @@ def num_records():
 
 @cache_data
 @wrong_input_handling
-def add_email(args):
+def add_email():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter the email address you want to add: "))
     check_args(args, WrongEmail())
     contact = get_contact(personal_assistant, args[0])
     contact.add_email(args[1])
@@ -217,7 +236,11 @@ def add_email(args):
 
 @cache_data
 @wrong_input_handling
-def change_email(args):
+def change_email():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter the email address you want to replace: "))
+    args.append(input("Please enter the new email address: "))
     if len(args) == 2:
         raise NoValue("Please provide a name, and old + new email addresses.")
     else:
@@ -228,7 +251,9 @@ def change_email(args):
 
 
 @wrong_input_handling
-def show_email(args):
+def show_email():
+    args = []
+    args.append(input("Please enter a name: "))
     check_args(args, NoValue())
     contact = get_contact(personal_assistant, args[0])
     found_emails = str_items(contact.emails)
@@ -241,7 +266,9 @@ def show_email(args):
 
 @cache_data
 @wrong_input_handling
-def delete_email(args):
+def delete_email():
+    args = []
+    args.append(input("Please enter a name: "))
     check_args(args, WrongEmail())
     contact = get_contact(personal_assistant, args[0])
     contact.delete_email(args[1])
@@ -250,7 +277,10 @@ def delete_email(args):
 
 @cache_data
 @wrong_input_handling
-def add_address(args):
+def add_address():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter physical address: "))
     try:
         address = pre_check_addr(args)
     except IndexError:
@@ -262,7 +292,10 @@ def add_address(args):
 
 @cache_data
 @wrong_input_handling
-def change_address(args):
+def change_address():
+    args = []
+    args.append(input("Please enter a name: "))
+    args.append(input("Please enter the new physical address: "))
     try:
         address = pre_check_addr(args)
     except IndexError:
@@ -273,7 +306,9 @@ def change_address(args):
 
 
 @wrong_input_handling
-def show_address(args):
+def show_address():
+    args = []
+    args.append(input("Please enter a name: "))
     check_args(args, NoValue())
     contact = get_contact(personal_assistant, args[0])
     add = contact.address
@@ -285,7 +320,9 @@ def show_address(args):
 
 @cache_data
 @wrong_input_handling
-def delete_address(args=None):
+def delete_address():
+    args = []
+    args.append(input("Please enter a name: "))
     if not args:
         raise NoValue("No name was provided. Try again.")
     contact = get_contact(personal_assistant, args[0])

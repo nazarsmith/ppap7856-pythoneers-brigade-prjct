@@ -71,8 +71,7 @@ def contacts_menu():
         user_input = session.prompt(
             "\nHow can I help you?\nEnter a command: contacts: "
         )
-        command, *args, message = parser(user_input)
-
+        command = parser(user_input)
         if command in ("exit", "close"):
             exit_assistant()
 
@@ -82,62 +81,62 @@ def contacts_menu():
         elif command == "help":
             print(messages.contacts_help_center)
 
-        elif command == "add-contact":
-            print(add_contact(args))
+        elif command in ("add-contact", "add-note"):
+            print(add_contact())
 
-        elif command == "find":
-            print(find_contact(args))
+        elif command in ("find-note", "find-contact"):
+            print(find_contact())
 
-        elif command == "all":
+        elif command in ("show-all", "show-all-notes"):
             print(show_all())
 
-        elif command == "show-phone":
-            print(show_phone(args))
+        elif command == "show-phone":  # no ML
+            print(show_phone())
 
         elif command == "change-phone":
-            print(change_contact(args))
+            print(change_contact())
 
-        elif command in ["remove-phone", "delete-phone"]:
-            print(remove_number(args))
+        elif command == "remove-phone":
+            print(remove_number())
 
         elif command == "add-birthday":
-            print(add_bd(args))
+            print(add_bd())
 
         elif command == "show-birthday":
-            print(show_birthday(args))
+            print(show_birthday())
 
         elif command == "birthdays":
-            print(birthdays_num_days(args))
+            print(birthdays_num_days())
 
-        elif command in ["delete", "remove"]:
-            print(del_contact(args))
+        elif command == "delete-contact":
+            print(del_contact())
 
-        elif command == "num-contacts":
+        elif command == "num-contacts":  # no ML
             print(num_records())
 
         elif command == "add-email":
-            print(add_email(args))
+            print(add_email())
 
         elif command == "change-email":
-            print(change_email(args))
+            print(change_email())
 
         elif command == "show-email":
-            print(show_email(args))
+            print(show_email())
 
         elif command == "delete-email":
-            print(delete_email(args))
+            print(delete_email())
 
-        elif command == "add-address":
-            print(add_address(args))
+        elif command == "add-address":  # no ML
+            print(add_address())
 
-        elif command == "change-address":
-            print(change_address(args))
+        elif command == "change-address":  # no ML
+            print(change_address())
 
-        elif command == "show-address":
-            print(show_address(args))
+        elif command == "show-address":  # no ML
+            print(show_address())
 
-        elif command == "delete-address":
-            print(delete_address(args))
+        elif command == "delete-address":  # no ML
+            print(delete_address())
 
         elif not command:
             ...
@@ -182,7 +181,7 @@ def notes_menu():
         commands_completer = WordCompleter(notes_commands)
         session = PromptSession(completer=commands_completer)
         user_input = session.prompt("\nHow can I help you?\nEnter a command: notes: ")
-        command, *args, message = parser(user_input)
+        command = parser(user_input)
 
         if command in ("exit", "close"):
             exit_assistant()
@@ -193,19 +192,19 @@ def notes_menu():
         elif command == "help":
             print(messages.notes_help_center)
 
-        elif command in ("add", "create", "touch"):
+        elif command in ("add-note"):
             print(add_note())
 
-        elif command in ("edit", "upd", "update", "change", "ch"):
+        elif command in ("edit-note"):
             print(edit_note())
 
-        elif command in ("remove", "delete", "del", "rm"):
+        elif command in ("delete-note"):
             print(remove_note())
 
-        elif command in ("show", "all", "list", "ls"):
+        elif command in ("show-all", "show-all-notes"):
             print(show_notes())
 
-        elif command in ("search", "seek", "find", "filter", "grep"):
+        elif command in ("find-note"):
             print(search_note())
 
         elif not command:

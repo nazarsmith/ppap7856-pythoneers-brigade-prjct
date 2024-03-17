@@ -1,13 +1,12 @@
 import os
+import random
 import pathlib
 import pickle
-import keras
 
 from personal_assistant.src.contacts.contacts import Contacts
 from personal_assistant.src.notes.notes import Notes
 from personal_assistant.src.intent_classifier.intent_classifier import IntentClassifier
 
-# from personal_assistant.src.
 
 _CACHE_DIR = pathlib.Path(__file__).parent.parent.joinpath(".cache")
 
@@ -55,4 +54,14 @@ class PersonalAssistant:
                 self._contacts.data.update(cache)
 
 
+print(
+    random.choice(
+        [
+            "Getting started..",
+            "Give me a few..",
+            "Coming!",
+            "Who the hell..?! Ah, it's you.. Ok ok.",
+        ]
+    )
+)
 personal_assistant = PersonalAssistant()

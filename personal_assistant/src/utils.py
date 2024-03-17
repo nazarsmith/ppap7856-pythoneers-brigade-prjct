@@ -76,6 +76,7 @@ def check_args(args, exc: Exception):
             raise WrongDate("Neither name nor date was provided. Please try again.")
 
     elif isinstance(exc, NoValue):
+        args = args[0].split()
         if len(args) != 1:
             raise NoValue("Please provide a contact name only.")
 
@@ -94,6 +95,7 @@ def check_args(args, exc: Exception):
             )
 
     elif isinstance(exc, AttributeError):
+        args = args[0].split()
         if len(args) < 1:
             raise WrongInfoException("No search query was provided. Please try again.")
         elif len(args) > 1:
@@ -201,7 +203,3 @@ def compose_contacts_list(found_contacts, all_records: list):
         all_records.append(message)
 
     return separator
-
-
-def str_items(lst):
-    return list(map(str, lst))
