@@ -15,12 +15,11 @@ from personal_assistant.src.utils import (
     wrong_input_handling,
     get_contact,
     pre_check_addr,
-    compose_contacts_list,
+    compose_contacts_list, str_items,
 )
 
 
 def greeting():
-    ## select and play a greeting reaction
     prompt = random.choice(["Hello!", "Hi!", "Greetings!"])
     return prompt
 
@@ -93,24 +92,20 @@ def find_contact(args):
     query = args[0]
     all_records = []
 
-    def match_item(record: Record):
+    def matches(record: Record):
         match = (
-            True
-            if (
                 query in str(record.name)
-                or query in str(record.address)
-                or True
-                in [query in email for email in record.list_str_rep(record.emails)]
-                or True
-                in [query in phone for phone in record.list_str_rep(record.phones)]
-            )
-            else False
+                or
+                query in str(record.address)
+                or
+                any(query in email for email in str_items(record.emails))
+                or
+                any(query in phone for phone in str_items(record.phones))
         )
+
         return match
 
-    matching_contacts = list(
-        filter(match_item, personal_assistant.contacts.data.values())
-    )
+    matching_contacts = list(filter(matches, personal_assistant.contacts.data.values()))
 
     sep = compose_contacts_list(matching_contacts, all_records)
     return (
@@ -132,7 +127,7 @@ def change_contact(args):
 def show_phone(args):
     check_args(args, NoValue())
     contact = get_contact(personal_assistant, args[0])
-    found_phones = contact.list_str_rep(contact.phones)
+    found_phones = str_items(contact.phones)
     found_phones = "; ".join(found_phones)
     return f"{args[0]}'s phone numbers: {found_phones}"
 
@@ -236,7 +231,7 @@ def change_email(args):
 def show_email(args):
     check_args(args, NoValue())
     contact = get_contact(personal_assistant, args[0])
-    found_emails = contact.list_str_rep(contact.emails)
+    found_emails = str_items(contact.emails)
     if found_emails:
         found_emails = "; ".join(found_emails)
         return f"{args[0]}'s emails: {found_emails}"

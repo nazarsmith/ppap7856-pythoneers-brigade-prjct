@@ -29,10 +29,6 @@ from personal_assistant.commands import (
     show_phone,
 )
 from personal_assistant.src import messages
-from personal_assistant.src.messages import (
-    contacts_interface_title,
-    notes_interface_title,
-)
 from personal_assistant.src.utils import parser
 
 contacts_commands = [
