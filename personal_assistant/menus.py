@@ -1,29 +1,32 @@
+from prompt_toolkit import PromptSession
+from prompt_toolkit.completion import WordCompleter
+
 from personal_assistant.commands import (
-    add_contact,
-    find_contact,
-    show_all,
-    show_phone,
-    change_contact,
-    remove_number,
-    add_bd,
-    show_birthday,
-    birthdays_num_days,
-    del_contact,
-    num_records,
-    add_email,
-    change_email,
-    show_email,
-    delete_email,
     add_address,
-    change_address,
-    show_address,
-    delete_address,
+    add_bd,
+    add_contact,
+    add_email,
     add_note,
+    birthdays_num_days,
+    change_address,
+    change_contact,
+    change_email,
+    del_contact,
+    delete_address,
+    delete_email,
     edit_note,
-    remove_note,
-    show_notes,
-    search_note,
     exit_assistant,
+    find_contact,
+    num_records,
+    remove_note,
+    remove_number,
+    search_note,
+    show_address,
+    show_all,
+    show_birthday,
+    show_email,
+    show_notes,
+    show_phone,
 )
 from personal_assistant.src import messages
 from personal_assistant.src.messages import (
@@ -32,10 +35,46 @@ from personal_assistant.src.messages import (
 )
 from personal_assistant.src.utils import parser
 
+contacts_commands = [
+    "add",
+    "delete",
+    "remove",
+    "find",
+    "all",
+    "num-contacts",
+    "show-phone",
+    "change-phone",
+    "delete-phone",
+    "remove-phone",
+    "add-birthday",
+    "show-birthday",
+    "birthdays",
+    "add-email",
+    "change-email",
+    "show-email",
+    "delete-email",
+    "add-address",
+    "change-address",
+    "show-address",
+    "delete-address",
+    "back",
+    "return",
+    "help",
+    "-",
+    "exit",
+    "close",
+]
+
 
 def contacts_menu():
+    print(contacts_interface_title)
     while True:
-        user_input = input("\nHow can I help you?\nEnter a command: contacts: ")
+
+        commands_completer = WordCompleter(contacts_commands)
+        session = PromptSession(completer=commands_completer)
+        user_input = session.prompt(
+            "\nHow can I help you?\nEnter a command: contacts: "
+        )
         command, *args, message = parser(user_input)
 
         if command in ("exit", "close"):
@@ -111,9 +150,42 @@ def contacts_menu():
             print("Invalid command. Please try again.")
 
 
+notes_commands = [
+    "add",
+    "create",
+    "touch",
+    "edit",
+    "upd",
+    "update",
+    "change",
+    "ch",
+    "remove",
+    "delete",
+    "del",
+    "rm",
+    "show",
+    "all",
+    "list",
+    "ls",
+    "search",
+    "seek",
+    "find",
+    "filter",
+    "grep",
+    "help" "back",
+    "return",
+    "-",
+    "exit",
+    "close",
+]
+
+
 def notes_menu():
+    print(notes_interface_title)
     while True:
-        user_input = input("\nHow can I help you?\nEnter a command: notes: ")
+        commands_completer = WordCompleter(notes_commands)
+        session = PromptSession(completer=commands_completer)
+        user_input = session.prompt("\nHow can I help you?\nEnter a command: notes: ")
         command, *args, message = parser(user_input)
 
         if command in ("exit", "close"):

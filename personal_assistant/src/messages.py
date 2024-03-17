@@ -62,7 +62,7 @@ Commands:
     add                  <name> <phone>   # add a new contact to your list.
     delete/remove        <name>   # delete the contact from your list.
     find                 <text>   # search a contact from your list by name, phone, email, or address.
-    num-contacts            # show the count of contacts in your list.
+    num-contacts         # show the count of contacts in your list.
     all                  # show all contacts
 
     show-phone           <name>   # show the phone number(s) of the contact.
@@ -102,5 +102,4 @@ Commands:
 
     back         # back to prev menu
     exit|close   # exit
-
 """
