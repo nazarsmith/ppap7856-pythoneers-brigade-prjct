@@ -49,9 +49,9 @@ class Birthday(Field):
             birthday = re.match(
                 r"^[0-3]{1}[0-9]{1}\.[0-1]{1}[0-9]{1}\.[0-9]{4}$", value
             ).group(0)
-        except AttributeError:
+            return datetime.strptime(birthday, "%d.%m.%Y")
+        except (AttributeError, ValueError):
             raise WrongDate("The date must be of the DD.MM.YYYY format. Try again.")
-        return datetime.strptime(birthday, "%d.%m.%Y")
 
 
 class Email(Field):

@@ -42,9 +42,9 @@ class Notes(UserList):
             return f"Note '{name}' not found in the Notes."
 
     def search_note(self, query: str):
-        name = query.split("name=")[-1].split(';')[0] if 'name=' in query else None
-        tag = query.split("tag=")[-1].split(';')[0] if 'tag=' in query else None
-        text = query.split("text=")[-1].split(";")[0] if 'text=' in query else None
+        name = query.split("name=")[-1].split(";")[0] if "name=" in query else None
+        tag = query.split("tag=")[-1].split(";")[0] if "tag=" in query else None
+        text = query.split("text=")[-1].split(";")[0] if "text=" in query else None
 
         def name_matches(note: Note):
             return note.name == name if name else True
@@ -61,9 +61,9 @@ class Notes(UserList):
         matching_notes = list(filter(matches, self.data))
 
         return (
-            '\nMatching Notes:\n' +
-            self._format_notes(matching_notes)
-            if matching_notes else 'No matching notes found.'
+            "\nMatching Notes:\n" + self._format_notes(matching_notes)
+            if matching_notes
+            else "No matching notes found."
         )
 
     @staticmethod
@@ -77,9 +77,11 @@ class Notes(UserList):
 
             if len(item) > max_length:
                 c = cycle(chain(repeat(0, max_length), repeat(1, max_length)))
-                first, *others = ["".join(g) for _, g in groupby(item, lambda x: next(c))]
+                first, *others = [
+                    "".join(g) for _, g in groupby(item, lambda x: next(c))
+                ]
                 first_line = pattern.format("", name, first)
-                other_lines = ''.join(pattern.format("", "", o) for o in others)
+                other_lines = "".join(pattern.format("", "", o) for o in others)
                 return first_line + other_lines
 
             return pattern.format("", name, item)
@@ -87,7 +89,9 @@ class Notes(UserList):
         table = []
 
         for i, note in enumerate(notes, start=1):
-            table.append(separator + "\n" + pattern.format(i, "Name", note.name) + separator)
+            table.append(
+                separator + "\n" + pattern.format(i, "Name", note.name) + separator
+            )
 
             tags = ", ".join(note.tags) if note.tags else "-"
             text = note.text if note.text else "-"

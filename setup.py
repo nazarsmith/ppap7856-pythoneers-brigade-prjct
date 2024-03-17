@@ -6,7 +6,7 @@ with open("README.md", "r") as description:
 
 setuptools.setup(
     name="py_brigade_personal_assistant",
-    version="0.0.4",
+    version="0.0.5",
     description="A personal assistant.",
     long_description=info,
     long_description_content_type="text/markdown",
@@ -16,14 +16,12 @@ setuptools.setup(
     license="MIT",
     packages=setuptools.find_namespace_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
     ],
-    install_requires=[],
+    install_requires=["tensorflow==2.12", "numpy", "prompt_toolkit"],
     entry_points={"console_scripts": ["get-started = personal_assistant.main:main"]},
     include_package_data=True,  # include non-.py files
     package_data={"": ["*.txt", "*.md"]},
