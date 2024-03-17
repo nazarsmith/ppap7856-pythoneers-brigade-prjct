@@ -4,7 +4,7 @@ from prompt_toolkit.completion import WordCompleter
 import personal_assistant.src.messages as messages
 from personal_assistant.commands import exit_assistant, greeting
 from personal_assistant.menus import contacts_menu, notes_menu
-from personal_assistant.src.utils import parser
+from personal_assistant.utils.utils import parser
 
 menu_commands = [
     "hello",

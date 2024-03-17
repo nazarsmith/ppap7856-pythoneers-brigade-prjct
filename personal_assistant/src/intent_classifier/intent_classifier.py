@@ -1,64 +1,52 @@
 from keras.utils import pad_sequences
-
-# from keras.preprocessing.text import Tokenizer
+import numpy as np
+import os
+import pathlib
+import pickle
 import keras
 
-# import tensorflow as tf
-import numpy as np
 
+class IntentClassifier:
+    def __init__(self):
+        res_pth = os.path.join(str(pathlib.Path(__file__).parents[2]), "resources")
+        # Load tokenizer
+        with open(os.path.join(res_pth, "tokenizer.pickle"), "rb") as handle:
+            self.tokenizer = pickle.load(handle)
+        # Load preprocessing parameters
+        with open(os.path.join(res_pth, "preprocessing_params.pickle"), "rb") as handle:
+            self.preprocessing_params = pickle.load(handle)
 
-import os
+        self.model = keras.models.load_model(os.path.join(res_pth, "intent_cat_v3"))
+        self.labels_dict = {
+            0: "add-note",
+            1: "add-note_tag",
+            2: "delete-contact",
+            3: "add-contact",
+            4: "contact-remove_email",
+            5: "add-contact_birthday",
+            6: "show-all",
+            7: "contact-remove_phone",
+            8: "contact-change_email",
+            9: "find-note",
+            10: "find-contact",
+            11: "contact-change_phone",
+            12: "show-birthday",
+        }
 
-# from personal_assistant import resources
-import pathlib
+    def predict(self, sentence="i want to add a new contact"):
 
-import pickle
+        self.PAD = self.preprocessing_params["PAD"]
+        self.TRUNC = self.preprocessing_params["TRUNC"]
+        self.MAX_LEN = self.preprocessing_params["MAX_LEN"]
 
-pth = os.path.join(str(pathlib.Path(__file__).parents[3]), "resources")
-print("pth", pth)
+        test_sentence = [sentence]
 
-# Load tokenizer
-with open(os.path.join(pth, "tokenizer.pickle"), "rb") as handle:
-    tokenizer = pickle.load(handle)
+        test_sequence = self.tokenizer.texts_to_sequences(texts=test_sentence)
 
-# Load preprocessing parameters
-with open(os.path.join(pth, "preprocessing_params.pickle"), "rb") as handle:
-    preprocessing_params = pickle.load(handle)
-
-PAD = preprocessing_params["PAD"]
-TRUNC = preprocessing_params["TRUNC"]
-MAX_LEN = preprocessing_params["MAX_LEN"]
-
-test_sentence = ["i want to add a new contact"]
-
-test_sequence = tokenizer.texts_to_sequences(texts=test_sentence)
-
-test_sequence = pad_sequences(
-    test_sequence, padding=PAD, truncating=TRUNC, maxlen=MAX_LEN
-)
-
-labels_dict = {
-    "add-note": 0,
-    "add-note_tag": 1,
-    "delete-contact": 2,
-    "add-contact": 3,
-    "contact-remove_email": 4,
-    "add-contact_birthday": 5,
-    "show-all": 6,
-    "contact-remove_phone": 7,
-    "contact-change_email": 8,
-    "find-note": 9,
-    "find-contact": 10,
-    "contact-change_phone": 11,
-    "show-birthday": 12,
-}
-
-model = keras.models.load_model(os.path.join(pth, "intent_cat_v3"))
-
-predicted = model.predict(test_sequence, verbose=0)
-
-# print(predicted)
-print(max(predicted[0]))
-print(np.where(predicted[0] == max(predicted[0]))[0][0])
-
-print(labels_dict)
+        test_sequence = pad_sequences(
+            test_sequence, padding=self.PAD, truncating=self.TRUNC, maxlen=self.MAX_LEN
+        )
+        predicted = self.model.predict(test_sequence, verbose=0)
+        probable_intent_key = np.where(predicted[0] == max(predicted[0]))[0][0]
+        probable_intent = self.labels_dict[probable_intent_key]
+        return probable_intent

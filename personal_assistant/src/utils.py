@@ -111,13 +111,13 @@ def pre_check_addr(args):
         raise IndexError
 
 
-def parser(user_input):
-    if user_input == "":
-        return None, None, "Please start with a valid command."
-
-    command, *args = user_input.split()
-    command = command.lower().strip()
-    return command, *args, None
+# def parser(user_input):
+#     if user_input == "":
+#         return None, None, "Please start with a valid command."
+#     print(personal_assistant.classifier.predict(user_input))
+#     command, *args = user_input.split()
+#     command = command.lower().strip()
+#     return command, *args, None
 
 
 def get_birthdays_num_days(users: list[any], days: int = ...):

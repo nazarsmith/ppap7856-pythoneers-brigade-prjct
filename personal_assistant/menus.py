@@ -29,7 +29,7 @@ from personal_assistant.commands import (
     show_phone,
 )
 from personal_assistant.src import messages
-from personal_assistant.src.utils import parser
+from personal_assistant.utils.utils import parser
 
 contacts_commands = [
     "add",

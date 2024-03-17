@@ -1,9 +1,11 @@
 import os
 import pathlib
 import pickle
+import keras
 
 from personal_assistant.src.contacts.contacts import Contacts
 from personal_assistant.src.notes.notes import Notes
+from personal_assistant.src.intent_classifier.intent_classifier import IntentClassifier
 
 # from personal_assistant.src.
 
@@ -17,6 +19,7 @@ class PersonalAssistant:
     def __init__(self):
         self._notes = Notes()
         self._contacts = Contacts()
+        self._classifier = IntentClassifier()
         self._load_cache_data()
 
     @property
@@ -26,6 +29,10 @@ class PersonalAssistant:
     @property
     def contacts(self):
         return self._contacts
+
+    @property
+    def classifier(self):
+        return self._classifier
 
     def cache_data(self):
         with open(_CACHE_DIR.joinpath("notes.bin"), "wb") as file:
