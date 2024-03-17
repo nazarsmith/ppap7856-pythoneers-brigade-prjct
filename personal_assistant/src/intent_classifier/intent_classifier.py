@@ -8,7 +8,7 @@ import keras
 
 class IntentClassifier:
     def __init__(self):
-        res_pth = os.path.join(str(pathlib.Path(__file__).parents[2]), "resources")
+        res_pth = pathlib.Path(__file__).parents[2].joinpath("resources")
         # Load tokenizer
         with open(os.path.join(res_pth, "tokenizer_v6.bin"), "rb") as handle:
             self.tokenizer = pickle.load(handle)
