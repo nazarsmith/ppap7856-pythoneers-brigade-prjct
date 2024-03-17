@@ -1,6 +1,5 @@
-import collections
 from datetime import datetime
-
+import collections
 from personal_assistant.src.exceptions.exceptions import (
     WrongInfoException,
     WrongDate,
@@ -140,7 +139,7 @@ def get_birthdays_num_days(users: list[any], days: int = ...):
         if days_delta < days:
             day_to_congrats = bd_this_year.strftime("%A")
 
-            # if the function is run on Sunday and the BD is in 6 days
+            ## if the function is run on Sunday and the BD is in 6 days
             if days_delta == days - 1 and day_to_congrats in ["Saturday", "Sunday"]:
                 day_to_congrats = "Next Monday"
             elif day_to_congrats in ["Saturday", "Sunday"]:
@@ -148,7 +147,7 @@ def get_birthdays_num_days(users: list[any], days: int = ...):
 
             bds_num_days[day_to_congrats].append([user.name.value, user.birthday.value])
     if len(bds_num_days) > 0:
-        # print out the list of names per day for the next num days
+        ## print out the list of names per day for the next num days
         for day, names in bds_num_days.items():
             for name in names:
                 date_of_birth = name[1].strftime("%Y-%m-%d")
@@ -158,7 +157,7 @@ def get_birthdays_num_days(users: list[any], days: int = ...):
     else:
         birthdays.append(f"No birthdays within the next {days} days.")
 
-    # in case the list is needed elsewhere
+    ## in case the list is needed elsewhere
     return birthdays
 
 
@@ -166,6 +165,7 @@ def compose_contacts_list(found_contacts, all_records: list):
     separator = f"{'-' * 4}|{'-' * 22}|{'-' * 62}|"
 
     def compose_message(name: str, item: any):
+
         line = "{:>3} | {:^20} | {:^60} |\n".format("", name, item)
         return line
 
