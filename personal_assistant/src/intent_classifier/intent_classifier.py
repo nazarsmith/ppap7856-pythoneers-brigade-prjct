@@ -10,27 +10,33 @@ class IntentClassifier:
     def __init__(self):
         res_pth = os.path.join(str(pathlib.Path(__file__).parents[2]), "resources")
         # Load tokenizer
-        with open(os.path.join(res_pth, "tokenizer.pickle"), "rb") as handle:
+        with open(os.path.join(res_pth, "tokenizer_v5.pickle"), "rb") as handle:
             self.tokenizer = pickle.load(handle)
         # Load preprocessing parameters
-        with open(os.path.join(res_pth, "preprocessing_params.pickle"), "rb") as handle:
+        with open(
+            os.path.join(res_pth, "preprocessing_params_v5.pickle"), "rb"
+        ) as handle:
             self.preprocessing_params = pickle.load(handle)
 
-        self.model = keras.models.load_model(os.path.join(res_pth, "intent_cat_v3"))
+        self.model = keras.models.load_model(os.path.join(res_pth, "intent_cat_v5"))
         self.labels_dict = {
             0: "add-note",
-            1: "add-note_tag",
-            2: "delete-contact",
-            3: "add-contact",
-            4: "contact-remove_email",
-            5: "add-contact_birthday",
-            6: "show-all",
-            7: "contact-remove_phone",
-            8: "contact-change_email",
-            9: "find-note",
-            10: "find-contact",
-            11: "contact-change_phone",
-            12: "show-birthday",
+            1: "edit-note",
+            2: "add-birthday",
+            3: "show-all-notes",
+            4: "add-contact",
+            5: "delete-note",
+            6: "delete-contact",
+            7: "delete-email",
+            8: "change-phone",
+            9: "find-contact",
+            10: "show-all",
+            11: "remove-phone",
+            12: "find-note",
+            13: "change-email",
+            14: "birthdays",
+            15: "add-email",
+            16: "show-birthday",
         }
 
     def predict(self, sentence="i want to add a new contact"):

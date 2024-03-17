@@ -82,7 +82,7 @@ def contacts_menu():
         elif command == "help":
             print(messages.contacts_help_center)
 
-        elif command == "add":
+        elif command == "add-contact":
             print(add_contact(args))
 
         elif command == "find":
