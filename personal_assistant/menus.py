@@ -63,7 +63,6 @@ contacts_commands = [
 
 
 def contacts_menu():
-    print(contacts_interface_title)
     while True:
 
         commands_completer = WordCompleter(contacts_commands)
@@ -176,7 +175,6 @@ notes_commands = [
 
 
 def notes_menu():
-    print(notes_interface_title)
     while True:
         commands_completer = WordCompleter(notes_commands)
         session = PromptSession(completer=commands_completer)

@@ -203,3 +203,7 @@ def compose_contacts_list(found_contacts, all_records: list):
         all_records.append(message)
 
     return separator
+
+
+def str_items(lst):
+    return list(map(str, lst))
