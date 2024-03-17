@@ -6,7 +6,7 @@ with open("README.md", "r") as description:
 
 setuptools.setup(
     name="py_brigade_personal_assistant",
-    version="0.0.5",
+    version="0.0.9",
     description="A personal assistant.",
     long_description=info,
     long_description_content_type="text/markdown",
@@ -24,5 +24,7 @@ setuptools.setup(
     install_requires=["tensorflow==2.12", "numpy", "prompt_toolkit"],
     entry_points={"console_scripts": ["get-started = personal_assistant.main:main"]},
     include_package_data=True,  # include non-.py files
-    package_data={"": ["*.txt", "*.md"]},
+    package_data={
+        "": ["*.txt", "*.md", "*.bin", "*.index", "*.data-00000-of-00001", "*.pb"]
+    },
 )  ## python setup.py bdist_wheel ## install twine ## twine upload dist/* ## pip install -e - install from local dist

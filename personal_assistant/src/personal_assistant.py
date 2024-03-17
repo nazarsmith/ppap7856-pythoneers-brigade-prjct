@@ -57,10 +57,11 @@ class PersonalAssistant:
 print(
     random.choice(
         [
-            "Getting started..",
-            "Give me a few..",
-            "Coming!",
-            "Who the hell..?! Ah, it's you.. Ok ok.",
+            "\nLoading guns..",
+            "\nChecking gadgets..",
+            "\nIroning the tuxedo..",
+            "\nDetecting bugs..",
+            "\nServicing the Astong Martin..",
         ]
     )
 )
