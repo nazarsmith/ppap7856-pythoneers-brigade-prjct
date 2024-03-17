@@ -21,7 +21,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    install_requires=[],
+    install_requires=["tensorflow==2.12", "numpy", "prompt_toolkit"],
     entry_points={"console_scripts": ["get-started = personal_assistant.main:main"]},
     include_package_data=True,  # include non-.py files
     package_data={"": ["*.txt", "*.md"]},
