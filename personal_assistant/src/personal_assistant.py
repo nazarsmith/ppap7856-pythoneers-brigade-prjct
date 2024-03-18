@@ -61,7 +61,7 @@ print(
             "\nChecking gadgets..",
             "\nIroning the tuxedo..",
             "\nDetecting bugs..",
-            "\nServicing the Astong Martin..",
+            "\nServicing the Aston Martin..",
         ]
     )
 )
