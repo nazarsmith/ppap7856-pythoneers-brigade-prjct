@@ -1,6 +1,6 @@
 import setuptools
 
-with open("README.md", "r") as description:
+with open("README.md", "r", encoding="utf8") as description:
     global info
     info = description.read()
 

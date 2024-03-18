@@ -177,7 +177,7 @@ def show_birthday():
 def birthdays_num_days():
     args = []
     args.append(input("Please enter a number of days: "))
-    if not args:
+    if not args or args == [""]:
         days = 7
     else:
         try:
