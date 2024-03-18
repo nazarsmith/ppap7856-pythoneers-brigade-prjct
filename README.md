@@ -19,7 +19,6 @@ to get started.<br><br>
 ### Main menu
 | Command                         |    Values                                 | Description                                                                |
 | ---                             |  ---                                      | ---                                                                        |
-| `hi / hello / greeting`         |   -                                       | to say hi to your favorite PA!                                             |
 | `contacts`                      |   -                                       | to enter the address book interface;                                       |
 | `notes`                         |   -                                       | to enter the notes interface;                                              |
 | `close / exit`                  |   -                                       | to exit the personal assistant;                                            |
